@@ -1,7 +1,47 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>hi</h1>
+<h1>Main - {{ user }}</h1>
+
+<p>
+    <a href="{% url 'articles:create' %}">리뷰 작성</a>
+</p>
+
+<div>
+    {% if request.user.is_authenticated %}
+    <form action="{% url 'accounts:logout' %}" method=='POST'>
+        {% csrf_token %}
+        <input type="submit" value='로그아웃'>
+    </form>
+    
+    {% else %}
+        <a href="{% url 'accounts:signup' %}">회원가입</a>
+        <a href="{% url 'accounts:login' %}">로그인</a>
+    {% endif %}
+</div>
+
+
+{% for article in articles %}
+<div>
+    <p>후기 작성자 - {{ article.user }}</p>
+    <p><a href="{% url 'articles:detail' article.pk %}">제목 - {{ article.title }}</a></p>
+    <form action="{% url 'articles:likes' article.pk %}" metgod='POST'>
+        {% csrf_token %}
+        {% if request.user in article.like_users.all %}
+        <input type='submit' value='좋아요 취소'></input>
+
+        {% else %}
+        <input type='submit' value='좋아요'></input>
+
+        {% endif %}
+    </form>
+    <span>{{ article.like_users.all|length }}</span>
+
+    <hr>
+</div>
+{% endfor %}
+
+
 
 {% endblock content %}
 

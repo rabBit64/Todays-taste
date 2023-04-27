@@ -3,6 +3,41 @@
 {% block content %}
 <h1>detail</h1>
 
+<div>작성자 - {{ article.user }}</div>
+<div>제목 - {{ article.title }}</div>
+<div>내용 - {{ article.content }}</div>
+
+<br>
+
+{% if request.user == article.user %}
+<a href="{% url 'articles:update' article.pk %}" method='POST'>수정</a>
+<form action="{% url 'articles:delete' article.pk %}" method='POST'>
+    {% csrf_token %}
+    <input type="submit" value='게시글 삭제'>
+</form>
+{% endif %}
+
+
+<a href="{% url 'articles:index' %}">뒤로가기</a>
+
+<hr>
+
+<h3>댓글</h3>
+<div>
+    <form action="{% url 'articles:create_comment' article.pk %}" method='POST'>
+        {% csrf_token %}
+        {{ comment_form }}
+        <input type="submit" value='댓글 작성'>
+    </form>
+</div>
+
+<div>
+    {% for comment in comments %}
+    {{ comment.user }} - {{ comment.content }}
+    <hr>
+    {% endfor %}
+</div>
+
 {% endblock content %}
 
 
