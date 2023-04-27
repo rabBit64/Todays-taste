@@ -1,4 +1,34 @@
 {% extends 'base.html' %}
-<h1>프로필</h1>
+
 {% block content %}
+<h1>{{ user }}프로필</h1>
+<div>
+  팔로잉: <span id="following-count">{{person.followings.all|length}}</span>
+  팔로워: <span id="followers-count">{{person.followers.all|length}}</span>
+</div>
+{% if request.user != person %}
+<div>
+  <form id="follow-form" data-user-id="{{person.pk}}">
+    {% csrf_token %}
+    {% if request.user in person.followers.all %}
+      <input type="submit" value="언팔로우">
+    {% else %}
+      <input type="submit" value="팔로우">
+    {% endif %}
+  </form>
+</div>
+{% endif %}
+<hr>
+<h3>{{ person.username }}가 작성한 댓글</h3>
+{% for comment in person.comment_set.all %}
+  <div>{{comment.content}}</div>
+{% endfor %}
+<hr>
+<h3>{{ person.username }}가 좋아요를 누른 모든 게시글</h3>
+{% for article in person.like_articles.all %}
+  <div>{{ article.title }}</div>
+{% endfor %}
+
+
+
 {% endblock content %}

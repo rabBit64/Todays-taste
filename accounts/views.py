@@ -6,6 +6,7 @@ from .forms import CustomAuthenticationForm
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 
 def login(request):
     if request.user.is_authenticated:
@@ -50,7 +51,7 @@ def profile(request,pk):
     return render(request,'accounts/profile.html',context)
 
 @login_required
-def edit(request, user):
+def update(request):
     if request.method == 'POST':
         form = CustomUserChangeForm(request.POST, instance=request.user)
         if form.is_valid():
@@ -60,7 +61,6 @@ def edit(request, user):
         form = CustomUserChangeForm(instance=request.user)
     context = {
         'form' : form,
-        'user': user,
     }
     return render(request,'accounts/update.html', context)
 
@@ -70,3 +70,32 @@ def delete(request):
     user.delete()
     logout(request)
     return redirect(request,'articles:index')
+
+def profile(request,username):
+    User = get_user_model()
+    person = User.objects.get(username=username)
+    context = {
+        'person':person,
+    }
+    return render(request,'accounts/profile.html',context)
+
+@login_required
+def follow(request, user_pk):
+    User = get_user_model()
+    you = User.objects.get(pk=user_pk)
+    me = request.user
+
+    if you!=me:
+        if me in you.followers.all():
+            you.followers.remove(me)
+            is_followed=False
+        else:
+            you.followers.add(me)
+            is_followed=True
+        context = {
+            'is_followed':is_followed,
+            'following_count':you.followings.count(),
+            'followers_count':you.followers.count(),
+        }
+        return JsonResponse(context)
+    return redirect('accounts:profile',context)
