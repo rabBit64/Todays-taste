@@ -12,6 +12,8 @@ class Article(models.Model):
     title = models.CharField(max_length=80)
     content = models.TextField()
     like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_articles')
+    #스크랩
+    scrap = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='scrapped_articles')
     created_at = models.DateTimeField(auto_now_add=True)
     image = ProcessedImageField(blank=True, null=True,
                                 upload_to='img/',

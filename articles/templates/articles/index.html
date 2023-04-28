@@ -27,7 +27,7 @@
 <div>
     <p>후기 작성자 - {{ article.user }}</p>
     <p><a href="{% url 'articles:detail' article.pk %}">제목 - {{ article.title }}</a></p>
-    <form action="{% url 'articles:likes' article.pk %}" metgod='POST'>
+    <form action="{% url 'articles:likes' article.pk %}" method='POST'>
         {% csrf_token %}
         {% if request.user in article.like_users.all %}
         <input type='submit' value='좋아요 취소'></input>
@@ -36,6 +36,17 @@
         <input type='submit' value='좋아요'></input>
 
         {% endif %}
+    </form>
+    <!--스크랩-->
+    <form action="{% url 'articles:scrap' article.pk %}" metgod='POST'>
+      {% csrf_token %}
+      {% if request.user in article.scrap.all %}
+      <input type='submit' value='스크랩 취소'></input>
+
+      {% else %}
+      <input type='submit' value='스크랩'></input>
+
+      {% endif %}
     </form>
     <span>{{ article.like_users.all|length }}</span>
 
