@@ -40,7 +40,7 @@
     <span>{{ article.like_users.all|length }}</span>
 
    
-    {% comment %} <div class="sec7-text-box">
+    <div class="sec7-text-box">
         <p>오픈날짜</p>
         <p class="runTimeCon">2023년 04월 29일 AM 00시</p>
         <hr/>
@@ -52,20 +52,48 @@
             <span class="col">:</span>
             <span id="d-day-sec-{{article.pk}}"></span>
         </div>
-    </div> {% endcomment %}
-
-    <div id="countdown"></div>
-    <div id="newcountdown"></div>
-
+    </div>
 </div>
 
 <hr>
 <br>
 {% endfor %}
 
-
-
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    function remaindTime() {
+        {% for article in articles %}
+          var now = new Date();
+          var open = new Date(2023, 03, 29, 00, 00, 00);
+          var nt = now.getTime();
+          var ot = open.getTime();
+          if (nt < ot) {
+            var sec = parseInt((ot - nt) / 1000);
+            var hour = parseInt(sec /3600);
+            sec = sec % 3600;
+            var min = parseInt(sec / 60);
+            sec = sec % 60;
+            if (hour < 10) {
+              hour = "0" + hour;
+            }
+            if (min < 10) {
+              min = "0" + min;
+            }
+            if (sec < 10) {
+              sec = "0" + sec;
+            }
+            $("#d-day-hour-{{ article.pk }}").html(hour);
+            $("#d-day-min-{{ article.pk }}").html(min);
+            $("#d-day-sec-{{ article.pk }}").html(sec);
+          } else {
+            $("#d-day-hour-{{ article.pk }}").html('00');
+            $("#d-day-min-{{ article.pk }}").html('00');
+            $("#d-day-sec-{{ article.pk }}").html('00');
+          }
+        {% endfor %}
+      }
+      setInterval(remaindTime, 1000);
+      </script>
 {% endblock content %}
 
 
