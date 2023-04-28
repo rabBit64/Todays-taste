@@ -29,6 +29,8 @@
   <div>{{ article.title }}</div>
 {% endfor %}
 
-
-
+<h3>스크랩</h3>
+{% for article in person.scrapped_articles.all %}
+  <div>{{ article.title }}</div>
+{% endfor %}
 {% endblock content %}

@@ -126,6 +126,15 @@ def likes(request, article_pk):
         article.like_users.add(request.user)
     return redirect('articles:index')
 
+@login_required
+def scrap(request, article_pk):
+    article = Article.objects.get(pk=article_pk)
+
+    if article.scrap.filter(pk=request.user.pk).exists():
+        article.scrap.remove(request.user)
+    else:
+        article.scrap.add(request.user)
+    return redirect('articles:index')
 
 
 
