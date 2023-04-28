@@ -5,7 +5,7 @@ from .models import Article,Comment
 class ArticleForm(forms.ModelForm):
     class Meta:
         model = Article
-        fields = ('title','content','image')
+        fields = ('title','content','image',)
 
     # title = forms.CharField(
     #     label='제목',

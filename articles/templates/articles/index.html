@@ -20,6 +20,8 @@
     {% endif %}
 </div>
 
+<hr>
+<br>
 
 {% for article in articles %}
 <div>
@@ -37,12 +39,34 @@
     </form>
     <span>{{ article.like_users.all|length }}</span>
 
-    <hr>
+   
+    {% comment %} <div class="sec7-text-box">
+        <p>오픈날짜</p>
+        <p class="runTimeCon">2023년 04월 29일 AM 00시</p>
+        <hr/>
+        <p class="time-title">오픈까지 남은 시간</p>
+        <div class="time">
+            <span id="d-day-hour-{{article.pk}}"></span>
+            <span class="col">:</span>
+            <span id="d-day-min-{{article.pk}}"></span>
+            <span class="col">:</span>
+            <span id="d-day-sec-{{article.pk}}"></span>
+        </div>
+    </div> {% endcomment %}
+
+    <div id="countdown"></div>
+    <div id="newcountdown"></div>
+
 </div>
+
+<hr>
+<br>
 {% endfor %}
 
 
 
+
 {% endblock content %}
+
 
 

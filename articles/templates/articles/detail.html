@@ -1,18 +1,44 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% load static %}
 <h1>detail</h1>
 
+{% comment %} 게시글 내용 부분 {% endcomment %}
 <div>작성자 - {{ article.user }}</div>
 <div>제목 - {{ article.title }}</div>
 <div>내용 - {{ article.content }}</div>
-<div>
-  {% comment %} {% if article.image %} {% endcomment %}
-  <img src="{{ article.image.url }}" alt="image" style="width: 100%">
+{% block timer %}
+<div class="sec7-text-box">
+  <p>오픈날짜</p>
+  <p class="runTimeCon">2023년 04월 29일 AM 00시</p>
+  <hr/>
+  <p class="time-title">오픈까지 남은 시간</p>
+  <div class="time">
+    <span id="d-day-hour"></span>
+    <span class="col">:</span>
+    <span id="d-day-min"></span>
+    <span class="col">:</span>
+    <span id="d-day-sec"></span>
+  </div>
 </div>
+{% endblock timer %}
+
+<div>
+  {% if article.image %}
+  <img src="{{ article.image.url }}" alt="image" style="width: 100%">
+  {% else %}
+  <img src="{% static 'No_img.webp' %}" alt="image" style="width: 100%">
+  {% endif %}
+</div>
+
+<p>{{ article.time_since_created }}</p>
 
 <br>
 
+
+
+{% comment %} 만약 현재 요청 유저와 글쓴이가 같다면 수정, 삭제 가능 {% endcomment %}
 {% if request.user == article.user %}
 <a href="{% url 'articles:update' article.pk %}" method='POST'>수정</a>
 <form action="{% url 'articles:delete' article.pk %}" method='POST'>
@@ -21,17 +47,11 @@
 </form>
 {% endif %}
 
-{% comment %} {% if post.image %}
-  <img src="{{ article.image.url }}" alt="image" style="width: 100%">
-{% else %}
-  <img style ='width:100%' src="{% static 'no-photo.png' %}" alt="no-img">
-{% endif %} {% endcomment %}
-
-
 <a href="{% url 'articles:index' %}">뒤로가기</a>
 
 <hr>
 
+{% comment %} 댓글 부분 {% endcomment %}
 <h3>댓글</h3>
 <div>
     <form action="{% url 'articles:create_comment' article.pk %}" method='POST'>
@@ -43,7 +63,8 @@
 
 <div>
     {% for comment in comments %}
-    {{ comment.user }} - {{ comment.content }}
+    <div>{{ comment.user }} - {{ comment.content }}</div>
+    <div>{{ comment.time_since_created }} 전</div>
     <hr>
     {% endfor %}
 </div>
