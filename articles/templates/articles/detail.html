@@ -17,6 +17,12 @@
 </form>
 {% endif %}
 
+{% comment %} {% if post.image %}
+  <img src="{{ article.image.url }}" alt="image" style="width: 100%">
+{% else %}
+  <img style ='width:100%' src="{% static 'no-photo.png' %}" alt="no-img">
+{% endif %} {% endcomment %}
+
 
 <a href="{% url 'articles:index' %}">뒤로가기</a>
 

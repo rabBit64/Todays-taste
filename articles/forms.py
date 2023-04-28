@@ -9,6 +9,10 @@ class ArticleForm(forms.ModelForm):
     content = forms.CharField(
         label = '내용',
     )
+
+    image = forms.ImageField(
+        label = '이미지'
+    )
     class Meta:
         model = Article
         fields = ('title','content',)
