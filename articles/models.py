@@ -12,10 +12,11 @@ class Article(models.Model):
     like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_articles')
     created_at = models.DateTimeField(auto_now_add=True)
     image = ProcessedImageField(blank=True, null=True,
-                                upload_to='image/',
+                                upload_to='img/',
                                 processors=[ResizeToFill(260, 300)],
                                 format='JPEG',
                                 options={'quality': 90})
+  
 
 
 class Comment(models.Model):

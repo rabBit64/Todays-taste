@@ -6,6 +6,10 @@
 <div>작성자 - {{ article.user }}</div>
 <div>제목 - {{ article.title }}</div>
 <div>내용 - {{ article.content }}</div>
+<div>
+  {% comment %} {% if article.image %} {% endcomment %}
+  <img src="{{ article.image.url }}" alt="image" style="width: 100%">
+</div>
 
 <br>
 
