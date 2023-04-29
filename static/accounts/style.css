@@ -1,0 +1,103 @@
+* {
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.login-div{
+  margin: 0px auto;
+  padding: 140px 0px;
+  max-width: 300px;
+}
+
+.login-logo-size{
+  width: 50px;
+  height: 50px;
+}
+
+.login-logo-p{
+  font-size: 25px;
+  font-weight: bold;
+  line-height: 50px;
+  white-space: nowrap;
+}
+
+.login-logo-a{
+  text-decoration: none;
+  color: black;
+}
+
+.login-span{
+  color: white;
+  font-weight: bold;
+}
+.login-btn{
+  width: 300px;
+  height: 50px;
+  margin-bottom: 20px;
+  background-color: #FFF8D6;
+  border-radius: 8px;
+  opacity: 1;
+  
+}
+
+.login-btn:hover{
+  opacity: 0.6;
+}
+
+
+.login-singup-password-a{
+  text-decoration: none;
+  color: black;
+  font-size: 15px;
+}
+
+.login-section-div{
+  margin: 35px 0 15px;
+  color: #757575;
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 1.33;
+  text-align: center;
+}
+
+.login-path-icon{
+  opacity: 1;
+}
+
+.login-path-icon:hover{
+  opacity: 0.8;
+}
+
+.login-error{
+  margin-top: 24px;
+  line-height: 18px;
+}
+
+.login-errpr-a{
+  text-decoration: none;
+  color: #c2c8cc;
+  font-size: 14px;
+}
+
+.login-nonmember{
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 1px solid #dbdbdb;
+}
+
+.login-footer{
+  padding-top: 8px;
+  width: 100% ;
+  font-size: 9px;
+  line-height: 20px;
+  margin: -5px 0 25px;
+  color: #757575;
+}
+
+.login-footer-a{
+  text-decoration: none;
+  color: #757575;
+}
+
+.login-footer-a:hover{
+  text-decoration: underline;
+}
