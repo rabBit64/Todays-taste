@@ -1,7 +1,10 @@
+/* 기본 폰트 */
+
 * {
   font-family: 'Noto Sans KR', sans-serif;
 }
 
+/* login_page */
 .login-div{
   margin: 0px auto;
   padding: 140px 0px;
@@ -100,4 +103,124 @@
 
 .login-footer-a:hover{
   text-decoration: underline;
+}
+
+/* signup_page */
+.signup-section{
+  margin-bottom:30px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid rgb(237, 237, 237);
+}
+
+.signup-main{
+  margin: 0 15px;
+  padding-top: 40px;
+}
+
+.signup-div{
+  margin: 0px auto;
+  padding: 60px 0px;
+  max-width: 360px;
+}
+
+.signup-at{
+  text-align: center;
+  line-height: 30px;
+  color: #dbdbdb;
+  font-weight: bold;
+}
+
+.signup-h{
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.signup-section-div{
+  margin: 15px 0 15px;
+  color: #757575;
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 1.33;
+  text-align: center;
+}
+
+.signup-btn{
+  width: 360px;
+  height: 50px;
+  margin-top: 10px;
+  background-color: white;
+  border: 1px solid #A4D0A4;
+  border-radius: 8px;
+  opacity: 1;
+  margin-bottom: 30px;
+}
+
+.signup-btn:hover{
+  background-color: #d9e9d9;
+  opacity: 0.9;
+}
+
+.signup-p{
+  margin-bottom: 12px;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 700;
+  color: #2F3438;
+}
+.signup-sub-p{
+  margin-bottom: 12px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
+  color: #828C94;
+}
+
+.signup-checkbox{
+  border: 1px solid #EAEDEF;
+  width: 360px;
+}
+
+.signup-checkbox-a{
+  width: 322px;
+  margin-bottom: 20px !important;
+}
+
+.signip-checkbox-detail{
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -0.3px;
+}
+
+.signip-checkbox-essential{
+  padding-left: 2px;
+  font-size: 12px;
+  line-height: 20px;
+  color: #009FCE;
+}
+.signip-checkbox-select{
+  padding-left: 2px;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.signup-checkbox-all{
+  color:#8A959B;
+  padding-left: 2px;
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: bold;
+}
+
+.signup-login-p{
+  font-size: 14px;
+}
+
+.signup-login-a{
+  color:black;
+  margin-left: 8px;
+  opacity: 1;
+}
+
+.signup-login-a:hover{
+  opacity: 0.8;
 }
