@@ -48,6 +48,11 @@ def detail(request,article_pk):
     article = Article.objects.get(pk = article_pk)
     comment_form = CommentForm()
     comments = article.comment_set.all()
+
+    # 조회수
+    article.view_count += 1
+    article.save()
+    
     context = {
         'article': article,
         'comment_form' : comment_form,
