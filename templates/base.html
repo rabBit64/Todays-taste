@@ -53,7 +53,7 @@
                 {% if request.user.is_authenticated %}
                     <button type="button" aria-label="프로필 메뉴" class="profile">
                         <picture>
-                            <img src="{% static 'smile.png' %}" alt="smile-profile">
+                            <a href="{% url 'accounts:profile' user.username %}"><img src="{% static 'smile.png' %}" alt="smile-profile"></a>
                         </picture>
                     </button>
                 {% else %}
