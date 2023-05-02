@@ -39,9 +39,25 @@ class Article(models.Model):
             return '방금 전'
 
 
-    
-    
-  
+# 상품 모델
+class Product(models.Model):
+    product_name = models.TextField() #상품명
+    price = models.IntegerField(default=0)
+    category = models.CharField(max_length=15)
+    main_image = models.ImageField(upload_to='product/',blank=True, null=True)
+    content = models.TextField() #상품정보
+    scrap = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='scrapped_product',null=True)
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_product',null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+# 상품 다중 이미지
+class ProductImages(models.Model):
+    product = models.ForeignKey(Product,blank=False,null=False,on_delete=models.CASCADE)
+    photo = ProcessedImageField(blank=True, null=True,
+                                upload_to='product/',
+                                processors=[ResizeToFill(300, 300)],
+                                format='JPEG',
+                                options={'quality': 90},)
 
 
 class Comment(models.Model):
