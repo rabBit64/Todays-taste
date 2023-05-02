@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Main - {{ user }}</h1>
+{% if request.user.is_authenticated %}
+  <h1>Main - <a href="{% url 'accounts:profile' user.username %} ">{{ user }}</a></h1>
+{% else %}
+<h1>Main - {{ user }}</a></h1>
+{% endif %}
 
 <p>
     <a href="{% url 'articles:create' %}">리뷰 작성</a>
