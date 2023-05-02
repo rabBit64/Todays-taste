@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Article, Comment
-from .forms import ArticleForm , CommentForm
+from .models import Article, Comment, Product, ProductImages
+from .forms import ArticleForm , CommentForm, ProductForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
@@ -158,3 +158,32 @@ def search(request):
     }
     print()
     return render(request, 'articles/index.html', context)
+
+
+#관리자 상품 업로드
+# def addProduct(request):
+#     user = request.user
+#     if request.method=='POST':
+#         data = request.POST
+#         images = request.FILES.getlist('main_image')
+
+#     for image in images:
+#         product_image = Product.objects.create(
+#             main_image=image,
+#         )
+
+# def product_create(request):
+#     if request.method == 'POST':
+#         form = ProductForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             product = form.save(commit=False)
+#             product.save()
+
+#             # images
+#             for image in request.FILES.getlist('images'):
+#                 photo = ProductImages(product=product, photo=image)
+#                 photo.save()
+#             return redirect('product_detail', pk=product.pk)
+#     else:
+#         form = ProductForm()
+#     return render(request, 'articles/product_create.html', {'form': form})

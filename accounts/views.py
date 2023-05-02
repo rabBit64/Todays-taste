@@ -99,3 +99,4 @@ def follow(request, user_pk):
         }
         return JsonResponse(context)
     return redirect('accounts:profile',context)
+
