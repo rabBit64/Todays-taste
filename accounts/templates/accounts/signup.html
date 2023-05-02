@@ -15,6 +15,11 @@
   
 </head>
 <body>
+  <form action="{% url 'accounts:signup' %}" method='POST'>
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit">
+  </form>
   <main class='signup-main'>
     {% comment %} 상단 logo {% endcomment %}
     <a class='login-logo-a' href="{% url 'articles:index' %}">

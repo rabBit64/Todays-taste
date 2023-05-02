@@ -224,3 +224,79 @@
 .signup-login-a:hover{
   opacity: 0.8;
 }
+
+/* profile */
+
+.profile-main-div{
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 32px;
+}
+
+.profile-main-btn{
+  border: 1px solid #DADDE0;
+}
+
+.profile-main-btn:hover{
+  background-color: #F1F3F5;
+}
+
+.profile-main-btn-Collapse{
+  margin-top: 20px;
+  margin-left: 90%;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: #fff;
+  box-shadow: 0 -1px 16px rgba(0,0,0,.2);
+  border-radius: 10px;
+  overflow: hidden;
+  max-width: 124px;
+}
+
+.profile-main-username{
+  font-size: 20px;
+  line-height: 28px;
+  display: block;
+  margin-top: 8px;
+  font-weight: 700;
+  color: #2F3438;
+  
+}
+
+.bp-tab {
+  display: flex;
+  margin: 0;
+}
+
+.bp-tab li {
+  margin: 0;
+  text-align: center;
+  font-size: 1.125rem;
+}
+
+.bp-tab-button {
+  width: 100%;
+  padding: 0.5rem;
+  border: 0;
+  background-color: #ffffff;
+  font-weight: bold;
+  color: #868b94;
+}
+
+.bp-content {
+  margin-top: 1.5rem;
+}
+
+.bp-tab-button {
+  width: 100%;
+  padding: 1rem;
+  border: 0;
+  background-color: #ffffff;
+  font-weight: bold;
+  color: black;
+}
+
+.bp-tab-button.active {
+  color: #F7E1AE;
+  border-bottom: 2px solid #F7E1AE;
+}

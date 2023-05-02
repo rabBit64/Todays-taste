@@ -76,7 +76,7 @@
     <nav class="navigation-bar">
         <div class="logo">
             <img src="{% static 'lemon-icon-removebg.png' %}" alt="lemon-icon">
-            <p id="logo-text"><a href="#">오늘의 취향</a></p>
+            <p id="logo-text"><a href="{% url 'articles:index' %}">오늘의 취향</a></p>
         </div>
         <div class="category-menu">
             <ul>
@@ -95,7 +95,7 @@
                 {% if request.user.is_authenticated %}
                     <button type="button" aria-label="프로필 메뉴" class="profile">
                         <picture>
-                            <img src="{% static 'smile.png' %}" alt="smile-profile">
+                            <a href="{% url 'accounts:profile' user.username %}"><img src="{% static 'smile.png' %}" alt="smile-profile"></a>
                         </picture>
                     </button>
                 {% else %}

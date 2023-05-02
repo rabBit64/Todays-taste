@@ -9,6 +9,11 @@
 
 
 {% block content %}
+{% if request.user.is_authenticated %}
+  <h1>Main - <a href="{% url 'accounts:profile' user.username %} ">{{ user }}</a></h1>
+{% else %}
+<h1>Main - {{ user }}</a></h1>
+{% endif %}
 {% load static %}
 
 {% comment %} <h1>Main - {{ user }}</h1>
