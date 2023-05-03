@@ -5,3 +5,4 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     followings = models.ManyToManyField('self',related_name='followers',symmetrical=False)
+    nickname= models.CharField(max_length=20)

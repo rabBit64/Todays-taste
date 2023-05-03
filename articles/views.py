@@ -3,6 +3,7 @@ from .models import Article, Comment, Product, ProductImages
 from .forms import ArticleForm , CommentForm, ProductForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from accounts.models import User
 
 # Create your views here.
 
@@ -15,10 +16,21 @@ def init(request):
 
 
 def index(request):
+    products = ProductImages.objects.all()
     articles = Article.objects.order_by('-pk')
-    context = {
-        'articles' : articles,
-    }
+    if request.user.is_authenticated:
+        nickname = request.user.nickname
+        context = {
+            'articles' : articles,
+            'products' : products,
+            'nickname' : nickname,
+        }
+        return render(request, 'articles/index.html', context)
+    else:
+        context = {
+            'articles' : articles,
+            'products' : products,
+        }
     return render(request, 'articles/index.html', context)
 
 
