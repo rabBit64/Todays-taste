@@ -9,8 +9,8 @@ class ProductMultipleImageAdmin(admin.StackedInline):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductMultipleImageAdmin]
-    fields = ['product_name','price','category','content']
-    list_display = ['product_name','price','category','content']
+    fields = ['product_name','price','category','content','main_image']
+    list_display = ['product_name','price','category','content','main_image']
     form = ProductForm
 
 

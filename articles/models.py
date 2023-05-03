@@ -17,11 +17,12 @@ class Article(models.Model):
     # 조회수
     view_count = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
-    image = ProcessedImageField(blank=True, null=True,
-                                upload_to='img/',
-                                processors=[ResizeToFill(260, 300)],
-                                format='JPEG',
-                                options={'quality': 90})
+    # image = ProcessedImageField(blank=True, null=True,
+    #                             upload_to='img/',
+    #                             processors=[ResizeToFill(260, 300)],
+    #                             format='JPEG',
+    #                             options={'quality': 90})
+    image = models.ImageField(upload_to='img/',blank=True, null=True,)
     # deadline = models.DateTimeField(auto_now=True)
     # 시간 설정
     def time_since_created(self):
@@ -44,7 +45,7 @@ class Product(models.Model):
     product_name = models.TextField() #상품명
     price = models.IntegerField(default=0)
     category = models.CharField(max_length=15)
-    main_image = models.ImageField(upload_to='product/',blank=True, null=True)
+    main_image = models.ImageField(upload_to='product/')
     content = models.TextField() #상품정보
     scrap = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='scrapped_product',null=True)
     like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_product',null=True)
