@@ -45,7 +45,7 @@ class Product(models.Model):
     product_name = models.TextField() #상품명
     price = models.IntegerField(default=0)
     category = models.CharField(max_length=15)
-    main_image = models.ImageField(upload_to='product/')
+    main_image = models.ImageField(upload_to='product_mainimg/')
     content = models.TextField() #상품정보
     scrap = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='scrapped_product',null=True)
     like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_product',null=True)

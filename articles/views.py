@@ -16,22 +16,37 @@ def init(request):
 
 
 def index(request):
-    products = ProductImages.objects.all()
     articles = Article.objects.order_by('-pk')
     if request.user.is_authenticated:
         nickname = request.user.nickname
         context = {
             'articles' : articles,
-            'products' : products,
             'nickname' : nickname,
         }
         return render(request, 'articles/index.html', context)
     else:
         context = {
             'articles' : articles,
-            'products' : products,
         }
     return render(request, 'articles/index.html', context)
+
+
+
+
+def product(request):
+    products = Product.objects.all()
+    if request.user.is_authenticated:
+        nickname = request.user.nickname
+        context = {
+            'products' : products,
+            'nickname' : nickname,
+        }
+        return render(request, 'articles/product.html', context)
+    else:
+        context = {
+            'products' : products,
+        }
+    return render(request, 'articles/product.html', context)
 
 
 

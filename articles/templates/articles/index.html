@@ -20,7 +20,7 @@
     <input type="submit" value='계정삭제'>
   </form>
 {% else %}
-<h1>Main - {{ user }}</a></h1>
+<h1>Main - {{ nickname }}</a></h1>
 {% endif %}
 {% load static %}
 
@@ -82,6 +82,13 @@
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
       </button>
+    </div>
+
+
+    <div>
+      {% for product in products %}
+       <img src="{{ product.main_image.url }}" alt="">
+      {% endfor %}
     </div>
 
 
