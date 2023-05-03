@@ -32,6 +32,7 @@ def logout(request):
 def signup(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
+        print(form)
         if form.is_valid():
             form.save()
             return redirect('accounts:login')

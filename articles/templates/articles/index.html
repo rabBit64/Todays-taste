@@ -10,7 +10,15 @@
 
 {% block content %}
 {% if request.user.is_authenticated %}
-  <h1>Main - <a href="{% url 'accounts:profile' user.username %} ">{{ user }}</a></h1>
+  <h1>Main - <a href="{% url 'accounts:profile' user.username %} ">{{ nickname }}</a></h1>
+  <form action="{% url 'accounts:logout' %}" method='POST'>
+    {% csrf_token %}
+    <input type="submit" value='로그아웃'>
+  </form>
+  <form action="{% url 'accounts:delete' %}" method='POST'>
+    {% csrf_token %}
+    <input type="submit" value='계정삭제'>
+  </form>
 {% else %}
 <h1>Main - {{ user }}</a></h1>
 {% endif %}

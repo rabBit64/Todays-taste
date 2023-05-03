@@ -15,11 +15,6 @@
   
 </head>
 <body>
-  <form action="{% url 'accounts:signup' %}" method='POST'>
-    {% csrf_token %}
-    {{form.as_p}}
-    <input type="submit">
-  </form>
   <main class='signup-main'>
     {% comment %} 상단 logo {% endcomment %}
     <a class='login-logo-a' href="{% url 'articles:index' %}">
@@ -58,10 +53,10 @@
         </div>
       </section>
       {% comment %} email {% endcomment %}
-      <form action="{% url 'accounts:login' %}" method="POST">
+      <form action="{% url 'accounts:signup' %}" method="POST">
         {% csrf_token %}
         <p class='signup-p' >이메일</p>
-          <div class='d-flex'>{{form.email}} 
+          <div class='d-flex'>{{form.username}} 
             <span class='signup-at mx-1'>@</span>
             {% comment %} 선택해주세요 toggle {% endcomment %}
             <div class="dropdown-center">
@@ -95,7 +90,7 @@
           </div>
           <div class='mb-3'>
             <p class='signup-p'>닉네임</p>
-              {{form.username}}
+              {{form.nickname}}
           </div>
           {% comment %} 약관동의 체크박스 {% endcomment %}
           <div class='signup-checkbox p-3'>
