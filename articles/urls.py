@@ -14,7 +14,9 @@ urlpatterns = [
     path('<int:article_pk>/likes/', views.likes, name='likes'),
     path('search/', views.search, name='search'),
     path('<int:article_pk>/scrap/', views.scrap, name='scrap'),
+    path('product/', views.product, name='product'),
      #관리자 상품 업로드
     # path('add/',views.addProduct,name='add_product'),
     # path('product_create/',views.product_create,name='product_create'),
+
 ]
