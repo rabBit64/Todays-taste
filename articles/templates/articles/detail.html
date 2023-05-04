@@ -97,6 +97,14 @@
     </div>
   </div>
   <div class="content-sidebar">
+    <form action="{% url 'articles:likes' article.pk %}" method="POST">
+      {% csrf_token %}
+      {% if request.user in article.like_users.all %}
+      <input class="like-button" type="submit" value="좋아요 취소">
+      {% else %}
+        <input class="like-button" type="submit" value="좋아요">
+      {% endif %}
+    </form>
     <button class="like-button" title="좋아요">
       <i class="ri-heart-line heart-icon"></i>
     </button>
