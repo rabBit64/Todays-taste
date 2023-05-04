@@ -18,10 +18,31 @@
         <a href="#"><b>{{ article.user }}</b></a>
         <p>{{ article.time_since_created }}</p>
       </div>
-      <button class="follow-button">
-        <span><i class="ri-add-line"></i></span>
-        <a href="#"><span style="margin-right:5px;">팔로우</span></a>
-      </button>
+
+      <!--수정필요-->
+      {% if request.user != article.user %}
+      {% comment %} <form action="{% url 'accounts:follow' article.user.pk %}" method='POST'> {% endcomment %}
+        <button class="follow-button" type='submit'>
+          <span><i class="ri-add-line"></i></span>
+          <span style="margin-right:5px;">팔로우</span>
+        </button> 
+      {% else %}
+      <div class="edit-section">
+        <button type="button" aria-label="수정하기, 삭제하기 버튼열기" onclick="openButton()">
+          <i class="ri-more-fill">
+          <div class="dropdown-content" id="mydropdown">
+            <a href="{% url 'articles:update' article.pk %}" method='POST' class="dropdown-text">수정하기</a>
+            <form action="{% url 'articles:delete' article.pk %}" method='POST'>
+                {% csrf_token %}
+                <input type="submit" value='삭제하기' class="dropdown-text" style="color: rgb(255, 119, 119);">
+            </form>
+          </div>
+        </i>
+        </button>
+      
+      </div>
+      
+      {% endif %}
     </div>
   </div>
   <!--본문-->
@@ -88,7 +109,7 @@
 
 
 
-{% block timer %}
+<!-- {% block timer %}
 <div class="sec7-text-box">
   <p>오픈날짜</p>
   <p class="runTimeCon">2023년 04월 29일 AM 00시</p>
@@ -102,27 +123,21 @@
     <span id="d-day-sec"></span>
   </div>
 </div>
-{% endblock timer %}
-
-
-<p>{{ article.time_since_created }}</p>
+{% endblock timer %} -->
 
 <br>
 
 
 
-{% comment %} 만약 현재 요청 유저와 글쓴이가 같다면 수정, 삭제 가능 {% endcomment %}
-{% if request.user == article.user %}
-<a href="{% url 'articles:update' article.pk %}" method='POST'>수정</a>
-<form action="{% url 'articles:delete' article.pk %}" method='POST'>
-    {% csrf_token %}
-    <input type="submit" value='게시글 삭제'>
-</form>
-{% endif %}
-
 <a href="{% url 'articles:index' %}">뒤로가기</a>
 
 <hr>
 {% endblock content %}
+{% block script %}
+function openButton(){
+  document.getElementById("mydropdown").classList.toggle("show");
+  console.log(document.getElementById("mydropdown"))
+}
+{% endblock script %}
 
 

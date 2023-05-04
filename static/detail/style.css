@@ -93,3 +93,28 @@ input[type=submit]{
 .like-text{
   margin-left:2px;
 }
+.edit-section{
+  position:relative;
+  display:inline-block;
+}
+.dropdown-content{
+  position:absolute;
+  background-color:white;
+  z-index:1;
+  box-shadow: rgba(63, 71, 77, 0.2) 0px 4px 10px 0px;
+  border-radius: 6px;
+  width: 120px;
+  padding: 8px;
+  display:none;
+  right:0;
+}
+.dropdown-text{
+  padding:10px;
+}
+.show{
+  display:block;
+}
+button{
+  border:none;
+  background-color:transparent;
+}
