@@ -26,7 +26,15 @@ class ArticleForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
+        #위젯추가
+        widgets = {
+            'content': forms.Textarea(attrs={'rows':1,'cols':100,'style':'border:none'}),
+        }
+
         fields = ('content',) 
+        labels = {
+            'content':""
+        }
 
 
 

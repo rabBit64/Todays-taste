@@ -70,11 +70,16 @@ def create(request):
 
 
 
+#팔로우 추가
+from django.contrib.auth import get_user_model
 
 def detail(request,article_pk):
     article = Article.objects.get(pk = article_pk)
     comment_form = CommentForm()
     comments = article.comment_set.all()
+
+    User = get_user_model()
+    # person = User.objects.get(username=username)
 
     # 조회수
     article.view_count += 1
