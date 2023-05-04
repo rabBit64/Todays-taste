@@ -28,7 +28,7 @@ class CustomAuthenticationForm(AuthenticationForm):
 
 class CustomUserCreationForm(UserCreationForm):
     nickname = forms.CharField(label='아이디', label_suffix='', widget=forms.TextInput(
-        attrs={'class': 'form-control', 'style': 'width: 360px;','placeholder': '별명 (2~15자)',}))
+        attrs={'class': 'form-control', 'style': 'width: 360px;','placeholder': '별명 (2~15자)','id':'user_id',}))
     username = forms.EmailField(label='이메일', label_suffix='', widget=forms.EmailInput(
         attrs={'class': 'form-control', 'style': 'width: 170px;', 'placeholder': '이메일',}))
     password1 = forms.CharField(label='비밀번호', label_suffix='', widget=forms.PasswordInput(
