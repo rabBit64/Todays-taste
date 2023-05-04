@@ -8,85 +8,82 @@
 
 
 
-<!--게시글 제목-->
-<div class="content-detail-section">
-  <!--헤더-->
-  <div class="content-detail-header">
-    <h1 class="content-detail-title">{{ article.title }}</h1>
-    <div class="content-header-bottom">
-      <div class="content-detail-author">
-        <a href="{% url 'accounts:profile' user.username %} "><b>{{ nickname }}</b></a>
-        <p>{{ article.time_since_created }}</p>
-      </div>
+<div class="detail-content-all">
+  <div class="content-detail-section">
+    <!--헤더-->
+    <div class="content-detail-header">
+      <h1 class="content-detail-title">{{ article.title }}</h1>
+      <div class="content-header-bottom">
+        <div class="content-detail-author">
+          <a href="{% url 'accounts:profile' user.username %} "><b>{{ nickname }}</b></a>
+          <p>{{ article.time_since_created }}</p>
+        </div>
 
-      <!--수정필요-->
-      {% if request.user != article.user %}
-      {% comment %} <form action="{% url 'accounts:follow' article.user.pk %}" method='POST'> {% endcomment %}
-        <button class="follow-button" type='submit'>
-          <span><i class="ri-add-line"></i></span>
-          <span style="margin-right:5px;">팔로우</span>
-        </button> 
-      {% else %}
-      <div class="edit-section">
-        <button type="button" aria-label="수정하기, 삭제하기 버튼열기" onclick="openButton()">
-          <i class="ri-more-fill">
-          <div class="dropdown-content" id="mydropdown">
-            <a href="{% url 'articles:update' article.pk %}" method='POST' class="dropdown-text">수정하기</a>
-            <form action="{% url 'articles:delete' article.pk %}" method='POST'>
-                {% csrf_token %}
-                <input type="submit" value='삭제하기' class="dropdown-text" style="color: rgb(255, 119, 119);">
-            </form>
-          </div>
-        </i>
-        </button>
-      
-      </div>
-      
-      {% endif %}
-    </div>
-  </div>
-  <!--본문-->
-  <div>
-    {% if article.image %}
-    <img src="{{ article.image.url }}" alt="image" style="width: 100%">
-    {% else %}
-    <img src="{% static 'No_img.webp' %}" alt="image" style="width: 100%">
-    {% endif %}
-  </div>
-  <div>{{ article.content }}</div>
-  <!--좋아요수, 스크랩수, 댓글수, 조회수-->
-  <div class="content-detail-stat">
-    <p class="content-detail-stat-item">좋아요 {{article.like_users|length}} </p>
-    <p class="content-detail-stat-item">스크랩 {{article.scrap|length}}</p>
-    <p class="content-detail-stat-item">댓글 {{comments|length}}</p>
-    <p class="content-detail-stat-item">조회 {{article.view_count}} </p>
-  </div>
-  <!--댓글-->
-  <div class="comment-section">
-    <div style="margin-top:3px;">
-      <p>댓글
-        <span class="comment-count">{{comments|length}} </span>
-      </p>
-    </div>
-    
-    <form class="comment-box" action="{% url 'articles:create_comment' article.pk %}" method='POST'>
-      {% csrf_token %}
-      {{ comment_form }}
-      <input type="submit" value='댓글 작성'>
-    </form>
-
-    <div>
-      {% for comment in comments %}
-      <b><div>{{ comment.user }}</div></b>
-      <div>{{ comment.content }}</div>
-      <div class='d-flex justify-content-between'>
-        <div>
-          <div class="comment-time">{{ comment.time_since_created }} 전</div>
-          <button type="button" class="like-comment">
-            <i class="ri-heart-line"></i>
-            <a href="#"><span class="like-text">좋아요</span></a>
+        <!--수정필요-->
+        {% if request.user != article.user %}
+        {% comment %} <form action="{% url 'accounts:follow' article.user.pk %}" method='POST'> {% endcomment %}
+          <button class="follow-button" type='submit'>
+            <span><i class="ri-add-line"></i></span>
+            <span style="margin-right:5px;">팔로우</span>
+          </button> 
+        {% else %}
+        <div class="edit-section">
+          <button type="button" aria-label="수정하기, 삭제하기 버튼열기" onclick="openButton()">
+            <i class="ri-more-fill">
+            <div class="dropdown-content" id="mydropdown">
+              <a href="{% url 'articles:update' article.pk %}" method='POST' class="dropdown-text">수정하기</a>
+              <form action="{% url 'articles:delete' article.pk %}" method='POST'>
+                  {% csrf_token %}
+                  <input type="submit" value='삭제하기' class="dropdown-text" style="color: rgb(255, 119, 119);">
+              </form>
+            </div>
+          </i>
           </button>
         </div>
+        {% endif %}
+      </div>
+    </div>
+    <!--본문-->
+    <div>
+      {% if article.image %}
+      <img src="{{ article.image.url }}" alt="image" style="width: 100%">
+      {% else %}
+      <img src="{% static 'No_img.webp' %}" alt="image" style="width: 100%">
+      {% endif %}
+    </div>
+    <div>{{ article.content }}</div>
+    <!--좋아요수, 스크랩수, 댓글수, 조회수-->
+    <div class="content-detail-stat">
+      <p class="content-detail-stat-item">좋아요 {{article.like_users|length}} </p>
+      <p class="content-detail-stat-item">스크랩 {{article.scrap|length}}</p>
+      <p class="content-detail-stat-item">댓글 {{comments|length}}</p>
+      <p class="content-detail-stat-item">조회 {{article.view_count}} </p>
+    </div>
+    <!--댓글-->
+    <div class="comment-section">
+      <div style="margin-top:3px;">
+        <p>댓글
+          <span class="comment-count">{{comments|length}} </span>
+        </p>
+      </div>
+      
+      <form class="comment-box" action="{% url 'articles:create_comment' article.pk %}" method='POST'>
+        {% csrf_token %}
+        {{ comment_form }}
+        <input type="submit" value='댓글 작성'>
+      </form>
+      <div>
+        {% for comment in comments %}
+        <b><div>{{ comment.user }}</div></b>
+        <div>{{ comment.content }}</div>
+        <div class='d-flex justify-content-between'>
+          <div>
+            <div class="comment-time">{{ comment.time_since_created }} 전</div>
+            <button type="button" class="like-comment">
+              <i class="ri-heart-line"></i>
+              <a href="#"><span class="like-text">좋아요</span></a>
+            </button>
+          </div>
         <div>
           <form action="{% url 'articles:comment_delete' article.pk comment.pk %}">
             <input style='font-size:12px;' type="submit" value='삭제'>
@@ -97,8 +94,28 @@
       <hr>
       {% endfor %}
     </div>
+    </div>
   </div>
+  <div class="content-sidebar">
+    <form action="{% url 'articles:likes' article.pk %}" method="POST">
+      {% csrf_token %}
+      {% if request.user in article.like_users.all %}
+      <input class="like-button" type="submit" value="좋아요 취소">
+      {% else %}
+        <input class="like-button" type="submit" value="좋아요">
+      {% endif %}
+    </form>
+    <button class="like-button" title="좋아요">
+      <i class="ri-heart-line heart-icon"></i>
+    </button>
+    <button class="like-button" title="스크랩">
+      <i class="ri-bookmark-line"></i>
+    </button>
+  </div>
+
 </div>
+
+  
 
   {% comment %} 페이지네이션 컴포넌트 시작 {% endcomment %}
   <ul class="pagination justify-content-center">
