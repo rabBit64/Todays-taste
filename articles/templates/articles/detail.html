@@ -1,13 +1,93 @@
 {% extends 'base.html' %}
-
+{% block head %}
+{% load static %}
+  <link rel="stylesheet" href="{% static 'detail/style.css' %}">
+{% endblock head %}
 {% block content %}
 {% load static %}
-<h1>detail</h1>
 
-{% comment %} 게시글 내용 부분 {% endcomment %}
-<div>작성자 - {{ article.user }}</div>
-<div>제목 - {{ article.title }}</div>
-<div>내용 - {{ article.content }}</div>
+
+
+<!--게시글 제목-->
+<div class="content-detail-section">
+  <!--헤더-->
+  <div class="content-detail-header">
+    <h1 class="content-detail-title">{{ article.title }}</h1>
+    <div class="content-header-bottom">
+      <div class="content-detail-author">
+        <a href="#"><b>{{ article.user }}</b></a>
+        <p>{{ article.time_since_created }}</p>
+      </div>
+      <button class="follow-button">
+        <span><i class="ri-add-line"></i></span>
+        <a href="#"><span style="margin-right:5px;">팔로우</span></a>
+      </button>
+    </div>
+  </div>
+  <!--본문-->
+  <div>
+    {% if article.image %}
+    <img src="{{ article.image.url }}" alt="image" style="width: 100%">
+    {% else %}
+    <img src="{% static 'No_img.webp' %}" alt="image" style="width: 100%">
+    {% endif %}
+  </div>
+  <div>{{ article.content }}</div>
+  <!--좋아요수, 스크랩수, 댓글수, 조회수-->
+  <div class="content-detail-stat">
+    {% if article.like_users %}
+      <p class="content-detail-stat-item">좋아요 {{article.like_users}} </p>
+    {% else %}
+      <p class="content-detail-stat-item">좋아요 0 </p>
+    {% endif %}
+    {% if articles.scrap %}
+      <p class="content-detail-stat-item">스크랩 {{article.scrap}}</p>
+    {% else %}
+      <p class="content-detail-stat-item">스크랩 0 </p>
+    {% endif %}
+    {% if comments %}
+      <p class="content-detail-stat-item">댓글 {{comments|length}}</p>
+    {% else %}
+      <p class="content-detail-stat-item">댓글 0 </p>
+    {% endif %}
+    <p class="content-detail-stat-item">조회 {{article.view_count}} </p>
+  </div>
+  <!--댓글-->
+  <div class="comment-section">
+    <div style="margin-top:3px;">
+      <p>댓글
+        <span class="comment-count">{{comments|length}} </span>
+      </p>
+    </div>
+    
+    <form class="comment-box" action="{% url 'articles:create_comment' article.pk %}" method='POST'>
+      {% csrf_token %}
+      {{ comment_form }}
+      <input type="submit" value='댓글 작성'>
+    </form>
+
+  <div>
+    {% for comment in comments %}
+    <b><div>{{ comment.user }}</div></b>
+    <div>{{ comment.content }}</div>
+    <div>
+      <div class="comment-time">{{ comment.time_since_created }} 전</div>
+      <button type="button" class="like-comment">
+        <i class="ri-heart-line"></i>
+        <a href="#"><span class="like-text">좋아요</span></a>
+      </button>
+    </div>
+    
+    <hr>
+    {% endfor %}
+</div>
+
+
+
+
+
+
+
 {% block timer %}
 <div class="sec7-text-box">
   <p>오픈날짜</p>
@@ -24,13 +104,6 @@
 </div>
 {% endblock timer %}
 
-<div>
-  {% if article.image %}
-  <img src="{{ article.image.url }}" alt="image" style="width: 100%">
-  {% else %}
-  <img src="{% static 'No_img.webp' %}" alt="image" style="width: 100%">
-  {% endif %}
-</div>
 
 <p>{{ article.time_since_created }}</p>
 
@@ -50,25 +123,6 @@
 <a href="{% url 'articles:index' %}">뒤로가기</a>
 
 <hr>
-
-{% comment %} 댓글 부분 {% endcomment %}
-<h3>댓글</h3>
-<div>
-    <form action="{% url 'articles:create_comment' article.pk %}" method='POST'>
-        {% csrf_token %}
-        {{ comment_form }}
-        <input type="submit" value='댓글 작성'>
-    </form>
-</div>
-
-<div>
-    {% for comment in comments %}
-    <div>{{ comment.user }} - {{ comment.content }}</div>
-    <div>{{ comment.time_since_created }} 전</div>
-    <hr>
-    {% endfor %}
-</div>
-
 {% endblock content %}
 
 
