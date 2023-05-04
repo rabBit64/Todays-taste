@@ -56,7 +56,19 @@
         <span class="visually-hidden">Next</span>
       </button>
     </div>
-
+    
+    <div class='d-flex gap-5 justify-content-center'>
+      <a href="{% url 'articles:product'  %}">전체</a>
+      <a href ="{% url 'articles:category' '가구' %}">가구</a>
+      <a href ="{% url 'articles:category' '디지털' %}">디지털</a>
+      <a href = "{% url 'articles:category' '캠핑' %}">캠핑</a>
+      <a href = "{% url 'articles:category' '조명' %}">조명</a>
+      <a href = "{% url 'articles:category' '식품' %}">식품</a>
+      <a href = "{% url 'articles:category' '생활용품' %}">생활용품</a>
+      <a href = "{% url 'articles:category' '생필품' %}">생필품</a>
+      <a href = "{% url 'articles:category' '데코' %}">데코</a>
+      <a href = "{% url 'articles:category' '반려동물' %}">반려동물</a>
+    </div>
 
     {% comment %} 상품 사진 & 설명 {% endcomment %}
     <div class='container'>
@@ -73,6 +85,57 @@
         </div>
     </div>
 </div>
+
+  {% comment %} 페이지네이션 컴포넌트 시작 {% endcomment %}
+  <ul class="pagination justify-content-center">
+    {% comment %}
+        이전 페이지 버튼
+        이전 페이지가 존재할 경우 이전 페이지 버튼 활성화
+    {% endcomment %}
+    {% if products.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ products.previous_page_number }}">이전</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+      </li>
+    {% endif %}
+    {% comment %}
+        페이지 번호 리스트 생성 반본북
+    {% endcomment %}
+    {% for page_number in products.paginator.page_range %}
+      {% comment %}
+        페이지 번호가 무한히 생성되는 것을 막는 조건문
+        현재 페이지에서 +- 5 까지 생성
+      {% endcomment %}
+      {% if page_number >= products.number|add:-5 and page_number <= products.number|add:5 %}
+        {% if page_number == products.number %}
+          <li class="page-item active" aria-current="page">
+            <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+          </li>
+        {% else %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+          </li>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+    {% comment %}
+        다음 페이지 버튼
+        다음 페이지가 존재할 경우 다음 페이지 버튼 활성화
+    {% endcomment %}
+    {% if products.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ products.next_page_number }}">다음</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+      </li>
+    {% endif %}
+  </ul>
+  {% comment %} 페이지네이션 컴포넌트 끝 {% endcomment %}
 
 
 {% endblock content %}
