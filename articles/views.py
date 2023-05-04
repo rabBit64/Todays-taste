@@ -208,19 +208,42 @@ def scrap(request, article_pk):
 
 
 
+# def search(request):
+#     query = request.GET.get('q', '')
+#     if query:
+#         search = Article.objects.filter(
+#             Q(title__icontains=query)|
+#             Q(user__username__exact=query)
+#         )
+#     else:
+#         search = Article.objects.all()[::-1]
+#     context = {
+#         'articles' : search
+#     }
+#     print()
+#     return render(request, 'articles/index.html', context)
 def search(request):
     query = request.GET.get('q', '')
     if query:
-        search = Article.objects.filter(
-            Q(title__icontains=query)|
-            Q(user__username__exact=query)
+        search_article = Article.objects.filter(
+            Q(title__icontains=query) |
+            Q(user__username__icontains=query)
         )
+        search_product = Product.objects.filter(
+            Q(product_name__icontains=query) |
+            Q(content__icontains=query)
+        )
+        # Article과 Product 검색 결과를 병합하여 리스트로 만듭니다.
+        search_result = list(search_article) + list(search_product)
+        # 검색된 결과를 생성 시간을 기준으로 내림차순으로 정렬합니다.
+        search_result.sort(key=lambda x: x.created_at, reverse=True)
     else:
-        search = Article.objects.all()[::-1]
+        # 검색어가 없을 경우에는 Article과 Product 전체를 생성 시간을 기준으로 내림차순으로 정렬합니다.
+        search_result = list(Article.objects.all()) + list(Product.objects.all())
+        search_result.sort(key=lambda x: x.created_at, reverse=True)
     context = {
-        'articles' : search
+        'search_result': search_result
     }
-    print()
     return render(request, 'articles/index.html', context)
 
 

@@ -151,6 +151,15 @@
         </div>
         
         {% endfor %}
+
+        {% for result in search_result %}
+          {% if result.image %}
+            <img src="{{ result.image.url }}" alt="...">
+          {% endif %}
+          {% if result.main_image %}
+            <img src="{{ result.main_image.url }}" alt="...">
+          {% endif %}
+        {% endfor %}
       </div>
     </div>
   </div>
