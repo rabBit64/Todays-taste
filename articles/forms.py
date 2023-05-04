@@ -4,9 +4,20 @@ from django.contrib import admin
 
 
 class ArticleForm(forms.ModelForm):
+    title = forms.CharField(label='제목', label_suffix='', widget=forms.TextInput(
+        attrs={'class': 'form-control', 'style': 'width: 360px;','placeholder': '제목',}))
+    content = forms.CharField(label='리뷰', label_suffix='', widget=forms.Textarea(
+        attrs={'class': 'form-control','style': 'width: 360px; height: 150px;', 'placeholder': '리뷰 작성',}))
+    # image = forms.ImageField(
+    #     widget = forms.FileInput(
+    #         attrs = {"id" : "image_field" , 
+    #                 'style' : "height: 100px; width : 360px;", 
+    #                 }
+    #         )
+    # )
     class Meta:
         model = Article
-        fields = ('title','content','image',)
+        fields = ('title','image','content',)
 
     # title = forms.CharField(
     #     label='제목',
