@@ -17,12 +17,12 @@
     <!--네브바-->
     <nav class="navigation-bar">
         <div class="logo">
-            <p><a href="#">오늘의 취향</a></p>
+            <p><a href="{% url 'articles:index' %}">오늘의 취향</a></p>
         </div>
         <div class="category-menu">
             <ul>
-                <li><a href="#">커뮤니티</a></li>
-                <li><a href="#">쇼핑</a></li>
+                <li><a href="{% url 'articles:index' %}">커뮤니티</a></li>
+                <li><a href="{% url 'articles:product' %}">쇼핑</a></li>
             </ul>
         </div>
         <div class="account-menu">
@@ -31,8 +31,8 @@
                 <button class="btn btn-outline-warning" type="submit">Search</button>
             </form>
             <ul>
-                <li><a href="#">로그인</a></li>
-                <li><a href="#">회원가입</a></li>
+                <li><a href="{% url 'accounts:login' %}">로그인</a></li>
+                <li><a href="{% url 'accounts:signup' %}">회원가입</a></li>
             </ul>
         </div>
     </nav>
