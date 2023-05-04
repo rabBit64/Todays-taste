@@ -64,7 +64,7 @@ class ProductImages(models.Model):
 class Comment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     review = models.ForeignKey(Article, on_delete=models.CASCADE)
-    content = models.TextField()
+    content = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     def time_since_created(self):
         time_difference = timezone.now() - self.created_at

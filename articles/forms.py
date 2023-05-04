@@ -24,18 +24,19 @@ class ArticleForm(forms.ModelForm):
 
 
 class CommentForm(forms.ModelForm):
+    content = forms.CharField(
+        label='',
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'style': 'width: 100%; display: inline-flex; border:0px;',
+            },
+        ),
+    )
     class Meta:
         model = Comment
-        #위젯추가
-        widgets = {
-            'content': forms.Textarea(attrs={'rows':1,'cols':100,'style':'border:none'}),
-        }
-
-        fields = ('content',) 
-        labels = {
-            'content':""
-        }
-
+        fields = ('content',)
+        label_suffix = ''
 
 
 class ProductForm(forms.ModelForm):

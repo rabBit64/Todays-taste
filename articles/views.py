@@ -93,6 +93,12 @@ def detail(request,article_pk):
     article = Article.objects.get(pk = article_pk)
     comment_form = CommentForm()
     comments = article.comment_set.all()
+    page = request.GET.get('page', '1')
+    per_page = 5
+    paginator = Paginator(comments, per_page)
+    page_obj = paginator.get_page(page)
+    page_num = paginator.num_pages
+
 
     User = get_user_model()
     # person = User.objects.get(username=username)
@@ -100,12 +106,22 @@ def detail(request,article_pk):
     # 조회수
     article.view_count += 1
     article.save()
-    
-    context = {
-        'article': article,
-        'comment_form' : comment_form,
-        'comments' : comments,
-    }
+    if request.user.is_authenticated:
+        nickname = request.user.nickname
+        context = {
+            'article': article,
+            'comment_form' : comment_form,
+            'comments' : page_obj,
+            'page_num ' : page_num ,
+            'nickname' : nickname,
+        }
+    else:
+         context = {
+            'article': article,
+            'comment_form' : comment_form,
+            'comments' : page_obj,
+            'page_num ' : page_num ,
+        }
     return render(request,'articles/detail.html',context)
 
 
