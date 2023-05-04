@@ -4,6 +4,7 @@ from .forms import ArticleForm , CommentForm, ProductForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from accounts.models import User
+from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -17,16 +18,24 @@ def init(request):
 
 def index(request):
     articles = Article.objects.order_by('-pk')
+    page = request.GET.get('page', '1')
+    per_page = 9
+    paginator = Paginator(articles, per_page)
+    page_obj = paginator.get_page(page)
+    page_num = paginator.num_pages
+
     if request.user.is_authenticated:
         nickname = request.user.nickname
         context = {
-            'articles' : articles,
+            'articles' : page_obj,
             'nickname' : nickname,
+            'page_num': page_num,
         }
         return render(request, 'articles/index.html', context)
     else:
         context = {
-            'articles' : articles,
+            'articles' : page_obj,
+            'page_num': page_num,
         }
     return render(request, 'articles/index.html', context)
 
@@ -35,16 +44,23 @@ def index(request):
 
 def product(request):
     products = Product.objects.all()
+    page = request.GET.get('page', '1')
+    per_page = 9
+    paginator = Paginator(products, per_page)
+    page_obj = paginator.get_page(page)
+    page_num = paginator.num_pages
     if request.user.is_authenticated:
         nickname = request.user.nickname
         context = {
-            'products' : products,
+            'products' : page_obj,
             'nickname' : nickname,
+            'page_num': page_num,
         }
         return render(request, 'articles/product.html', context)
     else:
         context = {
-            'products' : products,
+            'products' : page_obj,
+            'page_num': page_num,
         }
     return render(request, 'articles/product.html', context)
 
@@ -186,6 +202,20 @@ def search(request):
     print()
     return render(request, 'articles/index.html', context)
 
+
+def category(request,subject):
+    products = Product.objects.filter(category__contains=subject)
+    page = request.GET.get('page', '1')
+    per_page = 9
+    paginator = Paginator(products, per_page)
+    page_obj = paginator.get_page(page)
+    page_num = paginator.num_pages
+    context = {
+        'products' : page_obj,
+        'subject' : subject,
+        'page_num' : page_num,
+    }
+    return render(request, 'articles/category.html', context)
 
 #관리자 상품 업로드
 # def addProduct(request):

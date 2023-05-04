@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+
+<div class='container mt-3' style='width: 100%;'>
+  {% comment %} 상단 Carousel {% endcomment %}
+  <div id="carouselExampleAutoplaying" class="row carousel slide ms-5 me-5 mb-4" style='max-width: 1550px;' data-bs-ride="carousel">
+    <div class='container'>
+      <div class="carousel-indicators row">
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 5"></button>
+      </div>
+    </div>
+
+    <div class="carousel-inner" style="border-radius: 20px;">
+      <div class="carousel-item active">
+        <img src="{% static 'main/banner_camp.png' %}" class="d-block w-100" style="border-radius: 15px;"  alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'main/banner_light.png' %}" class="d-block w-100" style="border-radius: 15px;" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'main/banner_summer.png' %}" class="d-block w-100" style="border-radius: 15px;" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'main/banner_pet.png' %}" class="d-block w-100" style="border-radius: 15px;" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'main/banner_digital.png' %}" class="d-block w-100" style="border-radius: 15px;" alt="...">
+      </div>
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+  <div class='d-flex gap-5 justify-content-center'>
+    <a href="{% url 'articles:product'  %}">전체</a>
+    <a href ="{% url 'articles:category' '가구' %}">가구</a>
+    <a href ="{% url 'articles:category' '디지털' %}">디지털</a>
+    <a href = "{% url 'articles:category' '캠핑' %}">캠핑</a>
+    <a href = "{% url 'articles:category' '조명' %}">조명</a>
+    <a href = "{% url 'articles:category' '식품' %}">식품</a>
+    <a href = "{% url 'articles:category' '생활용품' %}">생활용품</a>
+    <a href = "{% url 'articles:category' '생필품' %}">생필품</a>
+    <a href = "{% url 'articles:category' '데코' %}">데코</a>
+    <a href = "{% url 'articles:category' '반려동물' %}">반려동물</a>
+  </div>
+
+  {% comment %} 상품 사진 & 설명 {% endcomment %}
+  <div class='container'>
+      <div class='row d-flex flex-row justify-content-center'>
+          {% for product in products %}
+          <div class='m-3' style='width: 300px;'>
+              <a href="#">
+                  <img src="{{ product.main_image.url }}" style='border-radius: 8px;' alt="">
+                  <p style='font-weight: bold;'>{{ product.product_name }}</p>
+                  <p>{{ product.price }}원</p>
+              </a>
+          </div>
+          {% endfor %}
+      </div>
+  </div>
+</div>
+
+  {% comment %} 페이지네이션 컴포넌트 시작 {% endcomment %}
+  <ul class="pagination justify-content-center">
+    {% comment %}
+        이전 페이지 버튼
+        이전 페이지가 존재할 경우 이전 페이지 버튼 활성화
+    {% endcomment %}
+    {% if products.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ products.previous_page_number }}">이전</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+      </li>
+    {% endif %}
+    {% comment %}
+        페이지 번호 리스트 생성 반본북
+    {% endcomment %}
+    {% for page_number in products.paginator.page_range %}
+      {% comment %}
+        페이지 번호가 무한히 생성되는 것을 막는 조건문
+        현재 페이지에서 +- 5 까지 생성
+      {% endcomment %}
+      {% if page_number >= products.number|add:-5 and page_number <= products.number|add:5 %}
+        {% if page_number == products.number %}
+          <li class="page-item active" aria-current="page">
+            <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+          </li>
+        {% else %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+          </li>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+    {% comment %}
+        다음 페이지 버튼
+        다음 페이지가 존재할 경우 다음 페이지 버튼 활성화
+    {% endcomment %}
+    {% if products.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ products.next_page_number }}">다음</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+      </li>
+    {% endif %}
+  </ul>
+  {% comment %} 페이지네이션 컴포넌트 끝 {% endcomment %}
+  {% comment %} {% for product in products %}
+    <img src="{{product.main_image.url}}" alt="">
+  {% endfor %} {% endcomment %}
+
+{% endblock content %}
+

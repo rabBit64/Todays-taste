@@ -18,5 +18,5 @@ urlpatterns = [
      #관리자 상품 업로드
     # path('add/',views.addProduct,name='add_product'),
     # path('product_create/',views.product_create,name='product_create'),
-
+    path('category/<str:subject>',views.category , name='category'),
 ]
