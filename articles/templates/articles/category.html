@@ -61,6 +61,10 @@
       <div class='row d-flex flex-row justify-content-center'>
           {% for product in products %}
           <div class='m-3' style='width: 300px;'>
+
+
+            <!-- 상품 상세 페이지 링크 연결해야함 -->
+            <!-- product pk 값을 받아와야 함 -->
               <a href="#">
                   <img src="{{ product.main_image.url }}" style='border-radius: 8px;' alt="">
                   <p style='font-weight: bold;'>{{ product.product_name }}</p>
