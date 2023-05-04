@@ -75,7 +75,7 @@
         <div class='row d-flex flex-row justify-content-center'>
             {% for product in products %}
             <div class='m-3' style='width: 300px;'>
-                <a href="#">
+                <a href="{% url 'articles:product_detail' product.pk %}">
                     <img src="{{ product.main_image.url }}" style='border-radius: 8px;' alt="">
                     <p class='mt-2 mb-1' style='font-weight: bold;'>{{ product.product_name }}</p>
                     <p>{{ product.price }} 원</p>
