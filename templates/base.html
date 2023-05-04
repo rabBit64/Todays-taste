@@ -70,7 +70,7 @@
     
 
 </head>
-<body>
+<body style='min-width: 700px;'>
     
     <!--네브바-->
     <nav class="navigation-bar">
@@ -107,10 +107,12 @@
                 
                 {% endif %}
                 <span class="scrap"><a href="#"><i class="ri-bookmark-line"></i></a></span>
-                <button type="button" class="write-button">
-                    <span id="write-text">글쓰기</span>
-                    <span><i class="ri-arrow-down-s-line"></i></span>
-                </button>
+                <a href="{% url 'articles:create' %}">
+                    <button type="button" class="write-button">
+                        <span id="write-text">글쓰기</span>
+                        <span><i class="ri-arrow-down-s-line"></i></span>
+                    </button>
+                </a>
             </div>
         </div>
     </nav>
@@ -227,8 +229,7 @@
  
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 <script>
-    {% block script %}
-    {% endblock script %}
+    {% block script %}{% endblock script %}
 </script>
 </body>
 

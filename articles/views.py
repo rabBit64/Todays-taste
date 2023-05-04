@@ -70,6 +70,13 @@ def product(request):
 @login_required
 def create(request):
     if request.method == 'POST':
+        user = request.user
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        image = request.POST.get('image')
+        article_model = Article(user=user,title=title,content=content,image=image)
+        article_model.save()
+
         form = ArticleForm(request.POST,request.FILES)
         print(request.FILES)
         if form.is_valid():
@@ -78,9 +85,19 @@ def create(request):
             article.save()
             return redirect('articles:detail', article.pk)
     else:
+        user = request.user
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        image = request.POST.get('image')
+        article_model = Article(user=user,title=title,content=content,image=image)
+        article_model.save()
+
+
+
         form = ArticleForm()
     context = {
         'form' : form,
+        'article_model' : article_model
     }
     return render(request, 'articles/create.html',context)
 
