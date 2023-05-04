@@ -57,7 +57,7 @@
       </button>
     </div>
     
-    <div class='d-flex gap-5 justify-content-center'>
+    <div class='d-flex gap-5 justify-content-center mb-3'>
       <a href="{% url 'articles:product'  %}">전체</a>
       <a href ="{% url 'articles:category' '가구' %}">가구</a>
       <a href ="{% url 'articles:category' '디지털' %}">디지털</a>
@@ -77,8 +77,8 @@
             <div class='m-3' style='width: 300px;'>
                 <a href="#">
                     <img src="{{ product.main_image.url }}" style='border-radius: 8px;' alt="">
-                    <p style='font-weight: bold;'>{{ product.product_name }}</p>
-                    <p>{{ product.price }}</p>
+                    <p class='mt-2 mb-1' style='font-weight: bold;'>{{ product.product_name }}</p>
+                    <p>{{ product.price }} 원</p>
                 </a>
             </div>
             {% endfor %}

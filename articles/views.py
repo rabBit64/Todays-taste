@@ -143,6 +143,12 @@ def detail(request,article_pk):
 
 
 
+# def product_detail(request, product_pk):
+#     product = Product.objects.get(pk=product_pk)
+
+
+
+
 @login_required
 def update(request,article_pk):
     article = Article.objects.get(pk=article_pk)
