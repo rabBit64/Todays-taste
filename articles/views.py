@@ -6,7 +6,6 @@ from django.db.models import Q
 from accounts.models import User
 from django.core.paginator import Paginator
 from django.http import JsonResponse
-# Create your views here.
 
 
 
@@ -226,7 +225,8 @@ def comment_delete(request, article_pk, comment_pk):
         comment.delete()
     return redirect('articles:detail', article_pk)
 
-
+# def comment_like(request):
+    
 
 
 @login_required

@@ -100,7 +100,7 @@ ul, p{
 .review-button{
   background-color:white;
   border: 1.2px solid #F7E1AE;
-  width:100px;
+  width:500px;
   border-radius:4px;
   
 }
@@ -121,45 +121,62 @@ ul, p{
         <p id="logo-text"><a href="{% url 'articles:index' %}">오늘의 취향</a></p>
       </div>
     </div>
-
-
-    <div class="container2">
-      <form action="{% url 'articles:create' %}" method ='POST' enctype="multipart/form-data">
-        {% csrf_token %}
-        <!--상품검색-->
-        <div class="search-area">
+      <!--상품검색-->
+        {% comment %} <div class="search-area">
           <p>내가 사용하는 상품 리뷰 쓰기</p>
           <form class='text-center' action="{% url 'articles:search' %}" role="search">
             <input type="search" placeholder="상품명 검색" name='q' class="product-search-box">
             <button type='submit' class='product-search-button'>검색</button>
           </form>
-        </div>
-        <!--별점평가-->
-        <div class="start-rating">
-          <p>별점평가</p>
-          <form class="rate-form" action="#" method="POST" id="#">
-            {% csrf_token %}
-            <button type="submit" class="fa fa-star star-btn" id="first"></button>
-            <button type="submit" class="fa fa-star star-btn" id="second"></button>
-            <button type="submit" class="fa fa-star star-btn" id="third"></button>
-            <button type="submit" class="fa fa-star star-btn" id="fourth"></button>
-            <button type="submit" class="fa fa-star star-btn" id="fifth"></button>
-          </form>
-        </div>
+        </div> {% endcomment %}
+       
+
+    <div class="container2">
+      <form action="{% url 'articles:create' %}" method ='POST' enctype="multipart/form-data">
+        {% csrf_token %}
         <!--리뷰작성-->
-        <div>
-          제목
+        <div class='justify-content-center'>
+          {{form.as_p}}
+          {% comment %} 제목
           <div class='mb-3 review-title'>{{form.title}}</div>
           <div>{{ form.image }}</div>
-          <div class='mb-5'>{{form.content}}</div>
-          {% comment %} <input type="text" name="title" id="title"> {% endcomment %}
-          {% comment %} <textarea name="content" id="content" cols="30" rows="10"></textarea> {% endcomment %}
-          <p class='text-center'><button type="submit" class="btn review-button"><b>리뷰쓰기</b></button></p>
+          <div class='mb-3'>{{form.content}}</div>
+           <!--별점평가-->
+          <div class="start-rating">
+            <p>별점평가</p>
+            <div class="rate-form">
+              {% csrf_token %}
+              <button class="fa fa-star star-btn" id="first"></button>
+              <button class="fa fa-star star-btn" id="second"></button>
+              <button class="fa fa-star star-btn" id="third"></button>
+              <button class="fa fa-star star-btn" id="fourth"></button>
+              <button class="fa fa-star star-btn" id="fifth"></button>
+            </div>
+          </div> {% endcomment %}
+          <button type="submit" class="btn review-button mt-3"><b>리뷰쓰기</b></button>
         </div>
       </form>
     </div>
-
+  </div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
- 
 </body>
+<script>
+  //1.버튼 요소 선택
+  const one = document.getElementById('first');
+  const two = document.getElementById('second');
+  const three = document.getElementById('third');
+  const four = document.getElementById('fourth');
+  const five = document.getElementById('fifth');
+
+  //2. 버튼에 이벤트 핸들러 부착
+  let starRank = 0
+  one.addEventListener('click', () =>{
+    starRank = 1
+    //3. star ranking form에 값 추가
+    const rankForm = document.querySelector('#id_star_ranking')
+    console.log(rankForm)
+    rankForm.value = starRank
+  })
+</script>
 </html>
