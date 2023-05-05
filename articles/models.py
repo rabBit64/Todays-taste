@@ -34,9 +34,9 @@ class Article(models.Model):
     # image = models.ImageField(upload_to='img/',blank=True, null=True,)
     # deadline = models.DateTimeField(auto_now=True)
     # 상품 지정
-    review_product = models.OneToOneField(Product)
+    # review_product = models.OneToOneField(Product, on_delete=models.DO_NOTHING)
     # 별점 추가
-    star_ranking = models.IntegerField(default=0)
+    # star_ranking = models.IntegerField(default=0)
     # 시간 설정
     def time_since_created(self):
         time_difference = timezone.now() - self.created_at
