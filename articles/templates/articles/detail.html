@@ -87,10 +87,15 @@
       <div class='d-flex justify-content-between'>
         <div>
           <div class="comment-time">{{ comment.time_since_created }} 전</div>
-          <button type="button" class="like-comment">
-            <i class="ri-heart-line"></i>
-            <a href="#"><span class="like-text">좋아요</span></a>
-          </button>
+          <!--댓글 ajax 추가-->
+          <form class="comment-like">
+            {% csrf_token %}
+            <button type="button" class="like-comment">
+              <i class="ri-heart-line"></i>
+              <a href="#"><span class="like-text">좋아요</span></a>
+            </button>
+          </form>
+         
         </div>
       <div>
         <form action="{% url 'articles:comment_delete' article.pk comment.pk %}">
@@ -217,15 +222,28 @@
 
 
 
-<a href="{% url 'articles:index' %}">뒤로가기</a>
-
 <hr>
-
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
   function openButton(){
     document.getElementById("mydropdown").classList.toggle("show");
     console.log(document.getElementById("mydropdown"))
   }
+//비동기 요청
+const commentLikeURL = ''
+axios({
+  method:'',
+  url : commentLikeURL,
+})
+  .then((response) => {
+    console.log(response.data)
+  })
+  .catch((error) => {
+    console.log("fail")
+  })
+  console.log("done")
+
+
 </script>
 {% endblock content %}
 
