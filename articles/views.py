@@ -131,6 +131,7 @@ def detail(request,article_pk):
             'comments' : page_obj,
             'page_num ' : page_num ,
             'nickname' : nickname,
+            'comment_all' : comments,
         }
     else:
          context = {
@@ -138,6 +139,7 @@ def detail(request,article_pk):
             'comment_form' : comment_form,
             'comments' : page_obj,
             'page_num ' : page_num ,
+            'comment_all' : comments,
         }
     return render(request,'articles/detail.html',context)
 
@@ -225,9 +227,20 @@ def comment_delete(request, article_pk, comment_pk):
         comment.delete()
     return redirect('articles:detail', article_pk)
 
-# def comment_like(request):
     
-
+def comment_like(request, article_pk,comment_pk):
+    comment = Comment.objects.get(pk=comment_pk)
+    if comment.like_users.filter(pk=request.user.pk).exists():
+        comment.like_users.remove(request.user)
+        is_comment_liked=False
+    else:
+        comment.like_users.add(request.user)
+        is_comment_liked=True
+    context={
+        'is_comment_liked': is_comment_liked,
+    }
+    # return redirect('articles:detail',article_pk,context)
+    return JsonResponse(context)
 
 @login_required
 def likes(request, article_pk):

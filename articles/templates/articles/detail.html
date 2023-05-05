@@ -86,15 +86,28 @@
       <div class='d-flex justify-content-between'>
         <div>
           <div class="comment-time">{{ comment.time_since_created }} 전</div>
-          <!--댓글 ajax 추가-->
-          <form class="comment-like">
+          <!--댓글좋아요 / 댓글 ajax 추가-->
+          <form action="{% url 'articles:comment_like' article.pk comment.pk %}" data-comment-id="{{ comment.pk }}" data-article-id="{{article.pk}}"class="comment-like-forms" method="POST">
             {% csrf_token %}
-            <button type="button" class="like-comment">
-              <i class="ri-heart-line"></i>
-              <a href="#"><span class="like-text">좋아요</span></a>
-            </button>
+              {% if  request.user in comment_all.pk.like_users.all %}
+                <i class="ri-heart-line"></i>
+                <input type="submit" value="좋아요취소" id="comment-like-{{ comment.pk }}">
+                {% comment %} <button type="submit" class="unlike-comment" id="comment-like-{{ comment.pk }}">
+                  <i class="ri-heart-line"></i>
+                  <span class="like-text">안좋아요</span>
+                </button> {% endcomment %}
+              {% else %}
+                {% comment %} <input type="submit" value="좋아요" id="comment-like-{{ comment.pk }}">  {% endcomment %}
+                <button type="submit" class="like-comment" id="comment-like-{{ comment.pk }}">
+                  <i class="ri-heart-fill"></i>
+                  <span class="like-text">좋아요</span>
+                  <div style="margin-left:3px">{{comment.like_users.all|length}}</div>
+                </button>
+                
+              {% endif %}
+              <!--수정필요-->
+              
           </form>
-         
         </div>
       <div>
         <form action="{% url 'articles:comment_delete' article.pk comment.pk %}">
@@ -225,25 +238,58 @@
 <hr>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-  function openButton(){
-    document.getElementById("mydropdown").classList.toggle("show");
-    console.log(document.getElementById("mydropdown"))
-  }
-//비동기 요청
-const commentLikeURL = ''
-axios({
-  method:'',
-  url : commentLikeURL,
+function openButton(){
+  document.getElementById("mydropdown").classList.toggle("show");
+  console.log(document.getElementById("mydropdown"))
+}
+//댓글 좋아요 비동기 요청
+const commentLikeForms = document.querySelectorAll('.comment-like-forms')
+console.log(commentLikeForms)
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+commentLikeForms.forEach((form) => {
+  form.addEventListener('submit', function(event) {
+    //이벤트 기본동작 취소
+    event.preventDefault()
+    console.log("로그를 찍어보자")
+    console.log(event.target)
+    console.log(event.target.dataset)
+    console.log(event.target.dataset.commentId)
+    console.log(event.target.dataset.articleId)
+    const commentId = event.target.dataset.commentId
+    const articleId = event.target.dataset.articleId
+    axios({
+      method: 'post',
+      url: `http://127.0.0.1:8000/articles/${articleId}/comments/${commentId}/comment_like/`,
+      headers: {'X-CSRFToken': csrftoken},
+    }).then((response) => {        
+      const isCommentLiked = response.data.is_comment_liked
+      console.log(isCommentLiked)        
+      const commentLikeBtn = document.querySelector(`#comment-like-${commentId}`)
+      const commentLikeCnt = document.querySelector(`#comment-like-${commentId} > div`)
+      const commentLikeTxt = document.querySelector(`#comment-like-${commentId} > span`)
+      const commentLikeIcon = document.querySelector(`#comment-like-${commentId} > i`)
+      console.log(commentLikeBtn)
+      if (isCommentLiked === true) {
+        //commentLikeBtn.value = '좋아요 취소'
+        console.log(commentLikeCnt.textContent)
+        commentLikeTxt.textContent = '좋아요 취소'
+        commentLikeCnt.textContent={{comment.like_users.all|length}}
+        commentLikeIcon.classList.add('ri-heart-fill')
+        commentLikeIcon.classList.remove('ri-heart-line')
+      
+      } else {
+        //commentLikeBtn.value = '좋아요'
+        console.log(commentLikeCnt.textContent)
+        commentLikeTxt.textContent = '좋아요'
+        commentLikeCnt.textContent={{comment.like_users.all|length}}
+        commentLikeIcon.classList.add('ri-heart-line')
+        commentLikeIcon.classList.remove('ri-heart-fill')
+      }
+    }).catch((error) => {
+      console.log(error.response)
+    })
+  })
 })
-  .then((response) => {
-    console.log(response.data)
-  })
-  .catch((error) => {
-    console.log("fail")
-  })
-  console.log("done")
-
-
 </script>
 {% endblock content %}
 

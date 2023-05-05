@@ -136,23 +136,24 @@ ul, p{
         {% csrf_token %}
         <!--리뷰작성-->
         <div class='justify-content-center'>
-          {{form.as_p}}
-          {% comment %} 제목
+          {% comment %} {{form.as_p}} {% endcomment %}
+          제목
           <div class='mb-3 review-title'>{{form.title}}</div>
           <div>{{ form.image }}</div>
           <div class='mb-3'>{{form.content}}</div>
            <!--별점평가-->
-          <div class="start-rating">
+           <div class="start-rating">
             <p>별점평가</p>
             <div class="rate-form">
               {% csrf_token %}
-              <button class="fa fa-star star-btn" id="first"></button>
-              <button class="fa fa-star star-btn" id="second"></button>
-              <button class="fa fa-star star-btn" id="third"></button>
-              <button class="fa fa-star star-btn" id="fourth"></button>
-              <button class="fa fa-star star-btn" id="fifth"></button>
+              <button type="button" class="fa fa-star star-btn" id="first" onClick ="saveValue()"></button>
+              <button type="button" class="fa fa-star star-btn" id="second"></button>
+              <button type="button" class="fa fa-star star-btn" id="third"></button>
+              <button type="button" class="fa fa-star star-btn" id="fourth"></button>
+              <button type="button" class="fa fa-star star-btn" id="fifth"></button>
             </div>
-          </div> {% endcomment %}
+          </div>
+          {{ form.star_ranking }}
           <button type="submit" class="btn review-button mt-3"><b>리뷰쓰기</b></button>
         </div>
       </form>
@@ -173,10 +174,15 @@ ul, p{
   let starRank = 0
   one.addEventListener('click', () =>{
     starRank = 1
-    //3. star ranking form에 값 추가
-    const rankForm = document.querySelector('#id_star_ranking')
-    console.log(rankForm)
-    rankForm.value = starRank
+    console.log("1 clicked")
+    const starForm = document.getElementById('#id_star_ranking');
+    console.log(starForm.value)
+    starForm.value = starRank
+    console.log(starForm.value)
   })
+  
+  function saveValue() {
+    console.log("hi")
+  }
 </script>
 </html>
