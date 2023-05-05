@@ -7,6 +7,7 @@ from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from articles.models import Article
 
 def login(request):
     if request.user.is_authenticated:
@@ -75,8 +76,10 @@ def delete(request):
 def profile(request,username):
     User = get_user_model()
     person = User.objects.get(username=username)
+    articles = Article.objects.all()
     context = {
         'person':person,
+        'articles' : articles,
     }
     return render(request,'accounts/profile.html',context)
 

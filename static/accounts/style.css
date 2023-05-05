@@ -263,18 +263,18 @@
   
 }
 
-.bp-tab {
+.profile-tab {
   display: flex;
   margin: 0;
 }
 
-.bp-tab li {
+.profile-tab li {
   margin: 0;
   text-align: center;
   font-size: 1.125rem;
 }
 
-.bp-tab-button {
+.profile-tab-button {
   width: 100%;
   padding: 0.5rem;
   border: 0;
@@ -283,11 +283,11 @@
   color: #868b94;
 }
 
-.bp-content {
+.profile-content {
   margin-top: 1.5rem;
 }
 
-.bp-tab-button {
+.profile-tab-button {
   width: 100%;
   padding: 1rem;
   border: 0;
@@ -296,7 +296,16 @@
   color: black;
 }
 
-.bp-tab-button.active {
+.profile-tab-button.active {
   color: #F7E1AE;
   border-bottom: 2px solid #F7E1AE;
 }
+
+.profile-follow-div{
+  color: #828C94;
+}
+
+.profile-follow-div:hover{
+  color: #828C94;
+}
+

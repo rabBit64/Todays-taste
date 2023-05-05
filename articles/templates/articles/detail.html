@@ -8,16 +8,16 @@
 
 
 
-<div class="detail-content-all">
-  <div class="content-detail-section">
-    <!--헤더-->
-    <div class="content-detail-header">
-      <h1 class="content-detail-title">{{ article.title }}</h1>
-      <div class="content-header-bottom">
-        <div class="content-detail-author">
-          <a href="{% url 'accounts:profile' user.username %} "><b>{{ nickname }}</b></a>
-          <p>{{ article.time_since_created }}</p>
-        </div>
+<!--게시글 제목-->
+<div class="content-detail-section">
+  <!--헤더-->
+  <div class="content-detail-header">
+    <h1 class="content-detail-title">{{ article.title }}</h1>
+    <div class="content-header-bottom">
+      <div class="content-detail-author">
+        <a href="{% url 'accounts:profile' article.user.username %} "><b>{{ article.user.nickname }}</b></a>
+        <p>{{ article.time_since_created }}</p>
+      </div>
 
         <!--수정필요-->
         {% if request.user != article.user %}
