@@ -141,7 +141,7 @@
             <div class="card-body">
               <div class='text-center text_color'>
                 <p class='text_title'>{{ article.title }}</p>
-                <p class='text_user'>{{ article.user }}</p>
+                <p class='text_user'>{{ article.user.nickname }}</p>
                 <span class='text_s_v me-1'>스크랩 {{ article.scrap.all|length }}</span>
                 <span class='text_s_v'>조회 {{ article.view_count }}</span>
               </div>

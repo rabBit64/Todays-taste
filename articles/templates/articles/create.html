@@ -100,6 +100,10 @@ ul, p{
   border: 1.2px solid #F7E1AE;
   width:100px;
   border-radius:4px;
+  
+}
+.review-button:hover{
+  background-color: #FFF8D6;
 }
 
 </style>
@@ -142,7 +146,7 @@ ul, p{
           <div class='mb-5'>{{form.content}}</div>
           {% comment %} <input type="text" name="title" id="title"> {% endcomment %}
           {% comment %} <textarea name="content" id="content" cols="30" rows="10"></textarea> {% endcomment %}
-          <p class='text-center'><input type="submit" value="리뷰쓰기" class="review-button"></p>
+          <p class='text-center'><button type="submit" class="btn review-button"><b>리뷰쓰기</b></button></p>
           </div>
         </div>
       </form>
