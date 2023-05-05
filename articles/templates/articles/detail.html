@@ -6,9 +6,6 @@
 {% block content %}
 {% load static %}
 
-
-
-<!--게시글 제목-->
 <div class="content-detail-section">
   <!--헤더-->
   <div class="content-detail-header">
@@ -19,90 +16,91 @@
         <p>{{ article.time_since_created }}</p>
       </div>
 
-        <!--수정필요-->
-        {% if request.user != article.user %}
-          <form action="{% url 'accounts:follow' article.pk %}" method='POST'>
-            {% csrf_token %}
-            {% if request.user in article.followers.all %}
-                <input class="follow-button" type='submit' value="언팔로우">
-                  {% comment %} <span><i class="ri-add-line"></i></span> {% endcomment %}
-                  {% comment %} <span style="margin-right:5px;"></span> {% endcomment %}
-                </input> 
-              {% else %}
-                <input class="follow-button" type='submit' value="팔로우">
-                  {% comment %} <span><i class="ri-add-line"></i></span> {% endcomment %}
-                  {% comment %} <span style="margin-right:5px;"></span> {% endcomment %}
-                </input> 
-          </form>
+      <!--수정필요-->
+      {% if request.user != article.user %}
+        <form action="{% url 'accounts:follow' article.user.pk %}" method='POST'>
+          {% csrf_token %}
+            {% if request.user in article.user.followers.all %}
+              <button class="follow-button" type='submit'>
+                <span><i class="ri-add-line"></i></span> 
+                <span style="margin-right:5px;">언팔로우</span>
+              </button>
+            {% else %}
+              <button class="follow-button" type='submit'>
+                <span><i class="ri-add-line"></i></span>
+                <span style="margin-right:5px;">팔로우</span>
+              </button> 
             {% endif %}
+        </form>
+        
 
-        {% else %}
-          <div class="edit-section">
-            <button type="button" aria-label="수정하기, 삭제하기 버튼열기" onclick="openButton()">
-              <i class="ri-more-fill">
-              <div class="dropdown-content" id="mydropdown">
-                <a href="{% url 'articles:update' article.pk %}" method='POST' class="dropdown-text">수정하기</a>
-                <form action="{% url 'articles:delete' article.pk %}" method='POST'>
-                    {% csrf_token %}
-                    <input type="submit" value='삭제하기' class="dropdown-text" style="color: rgb(255, 119, 119);">
-                </form>
-              </div>
-            </i>
-            </button>
-          </div>
-        {% endif %}
-    </div>
-    <!--본문-->
-    <div>
-      {% if article.image %}
-      <img src="{{ article.image.url }}" alt="image" style="width: 100%">
       {% else %}
-      <img src="{% static 'No_img.webp' %}" alt="image" style="width: 100%">
+        <div class="edit-section">
+          <button type="button" aria-label="수정하기, 삭제하기 버튼열기" onclick="openButton()">
+            <i class="ri-more-fill">
+            <div class="dropdown-content" id="mydropdown">
+              <a href="{% url 'articles:update' article.pk %}" method='POST' class="dropdown-text">수정하기</a>
+              <form action="{% url 'articles:delete' article.pk %}" method='POST'>
+                  {% csrf_token %}
+                  <input type="submit" value='삭제하기' class="dropdown-text" style="color: rgb(255, 119, 119);">
+              </form>
+            </div>
+          </i>
+          </button>
+        </div>
       {% endif %}
     </div>
-    <div>{{ article.content }}</div>
-    <!--좋아요수, 스크랩수, 댓글수, 조회수-->
-    <div class="content-detail-stat">
-      <p class="content-detail-stat-item">좋아요 {{article.like_users.all|length}} </p>
-      <p class="content-detail-stat-item">스크랩 {{article.scrap.all|length}}</p>
-      <p class="content-detail-stat-item">댓글 {{comments|length}}</p>
-      <p class="content-detail-stat-item">조회 {{article.view_count}} </p>
-    </div>
-    <!--댓글-->
-    <div class="comment-section">
-      <div style="margin-top:3px;">
-        <p>댓글
-          <span class="comment-count">{{comments|length}} </span>
-        </p>
-      </div>
-      
-      <form class="comment-box" action="{% url 'articles:create_comment' article.pk %}" method='POST'>
-        {% csrf_token %}
-        {{ comment_form }}
-        <input type="submit" value='댓글 작성'>
-      </form>
-      <div>
-        {% for comment in comments %}
-        <b><div>{{ comment.user }}</div></b>
-        <div>{{ comment.content }}</div>
-        <div class='d-flex justify-content-between'>
-          <div>
-            <div class="comment-time">{{ comment.time_since_created }} 전</div>
-            <button type="button" class="like-comment">
-              <i class="ri-heart-line"></i>
-              <a href="#"><span class="like-text">좋아요</span></a>
-            </button>
-          </div>
-        <div>
-          <form action="{% url 'articles:comment_delete' article.pk comment.pk %}">
-            <input style='font-size:12px;' type="submit" value='삭제'>
-          </form>
-        </div>
-      </div>
-    </div>  
-      <hr>
-      {% endfor %}
+    <!--본문-->
   </div>
+  <div>
+    {% if article.image %}
+    <img src="{{ article.image.url }}" alt="image" style="width: 100%">
+    {% else %}
+    <img src="{% static 'No_img.webp' %}" alt="image" style="width: 100%">
+    {% endif %}
+  </div>
+  <div>{{ article.content }}</div>
+  <!--좋아요수, 스크랩수, 댓글수, 조회수-->
+  <div class="content-detail-stat">
+    <p class="content-detail-stat-item">좋아요 {{article.like_users.all|length}} </p>
+    <p class="content-detail-stat-item">스크랩 {{article.scrap.all|length}}</p>
+    <p class="content-detail-stat-item">댓글 {{comments|length}}</p>
+    <p class="content-detail-stat-item">조회 {{article.view_count}} </p>
+  </div>
+  <!--댓글-->
+  <div class="comment-section">
+    <div style="margin-top:3px;">
+      <p>댓글
+        <span class="comment-count">{{comments|length}} </span>
+      </p>
+    </div>
+    
+    <form class="comment-box" action="{% url 'articles:create_comment' article.pk %}" method='POST'>
+      {% csrf_token %}
+      {{ comment_form }}
+      <input type="submit" value='댓글 작성'>
+    </form>
+    <div>
+      {% for comment in comments %}
+      <b><div>{{ comment.user }}</div></b>
+      <div>{{ comment.content }}</div>
+      <div class='d-flex justify-content-between'>
+        <div>
+          <div class="comment-time">{{ comment.time_since_created }} 전</div>
+          <button type="button" class="like-comment">
+            <i class="ri-heart-line"></i>
+            <a href="#"><span class="like-text">좋아요</span></a>
+          </button>
+        </div>
+      <div>
+        <form action="{% url 'articles:comment_delete' article.pk comment.pk %}">
+          <input style='font-size:12px;' type="submit" value='삭제'>
+        </form>
+      </div>
+    </div>
+  </div>  
+  <hr>
+  {% endfor %}
     
   
   <div class="content-sidebar">
