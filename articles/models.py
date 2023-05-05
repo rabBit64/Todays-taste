@@ -17,12 +17,12 @@ class Article(models.Model):
     # 조회수
     view_count = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
-    # image = ProcessedImageField(blank=True, null=True,
-    #                             upload_to='img/',
-    #                             processors=[ResizeToFill(260, 300)],
-    #                             format='JPEG',
-    #                             options={'quality': 90})
-    image = models.ImageField(upload_to='img/',blank=True, null=True,)
+    image = ProcessedImageField(blank=True, null=True,
+                                upload_to='img/',
+                                processors=[ResizeToFill(288, 220)],
+                                format='JPEG',
+                                options={'quality': 90})
+    # image = models.ImageField(upload_to='img/',blank=True, null=True,)
     # deadline = models.DateTimeField(auto_now=True)
     # 시간 설정
     def time_since_created(self):

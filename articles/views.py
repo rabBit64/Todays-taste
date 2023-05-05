@@ -148,9 +148,8 @@ def detail(request,article_pk):
 # 상품 상세페이지
 def product_detail(request, product_pk):
     product = Product.objects.get(pk=product_pk)
+    product_img = ProductImages.objects.filter(product=product_pk)
 
-    # 제품 사진들 불러와야 함 (아래 코드는 틀린 코드)
-    product_img = ProductImages.objects.all()
 
     if request.user.is_authenticated:
         nickname = request.user.nickname
@@ -164,6 +163,8 @@ def product_detail(request, product_pk):
             'product': product,
             'product_img': product_img,
         }
+         
+    
 
     return render(request,'articles/product_detail.html',context)
 
@@ -294,7 +295,7 @@ def search(request):
 
 
 
-# product pk 값을 받아와야 함
+
 def category(request,subject):
     products = Product.objects.filter(category__contains=subject)
     page = request.GET.get('page', '1')

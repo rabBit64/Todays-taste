@@ -12,12 +12,10 @@
 <p>가격 : {{ product.price }} 원</p>
 
 
- {% comment %} 제품 사진들 불러와야 함 (아래 코드는 틀린 코드)
-
 {% for p_img in product_img %}
-<img src="{{ p_img.photo }}" alt="">
+<img src="{{ p_img.photo.url }}" alt="">
 {% endfor %}
-{% endcomment %}
+
 
 
 
