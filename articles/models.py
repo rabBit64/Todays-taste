@@ -28,7 +28,7 @@ class Article(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     image = ProcessedImageField(blank=True, null=True,
                                 upload_to='img/',
-                                processors=[ResizeToFill(300, 300)],
+                                processors=[ResizeToFill(288, 220)],
                                 format='JPEG')
                                 # options={'quality': 90})
     # image = models.ImageField(upload_to='img/',blank=True, null=True,)

@@ -18,7 +18,6 @@ def init(request):
 # product pk 값을 받아와야 함
 def index(request):
     articles = Article.objects.order_by('-pk')
-    
     page = request.GET.get('page', '1')
     per_page = 9
     paginator = Paginator(articles, per_page)
@@ -238,6 +237,7 @@ def likes(request, article_pk):
     else:
         article.like_users.add(request.user)
     return redirect('articles:detail', article_pk)
+
 
 @login_required
 def scrap(request, article_pk):
