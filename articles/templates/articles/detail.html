@@ -54,8 +54,8 @@
     <div>{{ article.content }}</div>
     <!--좋아요수, 스크랩수, 댓글수, 조회수-->
     <div class="content-detail-stat">
-      <p class="content-detail-stat-item">좋아요 {{article.like_users|length}} </p>
-      <p class="content-detail-stat-item">스크랩 {{article.scrap|length}}</p>
+      <p class="content-detail-stat-item">좋아요 {{article.like_users.all|length}} </p>
+      <p class="content-detail-stat-item">스크랩 {{article.scrap.all|length}}</p>
       <p class="content-detail-stat-item">댓글 {{comments|length}}</p>
       <p class="content-detail-stat-item">조회 {{article.view_count}} </p>
     </div>
@@ -97,20 +97,40 @@
     </div>
   </div>
   <div class="content-sidebar">
-    <form action="{% url 'articles:likes' article.pk %}" method="POST">
+    <form action="{% url 'articles:likes' article.pk %}" method="POST" class="mb-4">
       {% csrf_token %}
       {% if request.user in article.like_users.all %}
-      <input class="like-button" type="submit" value="좋아요 취소">
+      {% comment %} <input class="like-button" type="submit" value="좋아요 취소"> {% endcomment %}
+      <button class="like-button m-0" title="좋아요 취소" type="submit">
+        <i class="ri-heart-fill heart-fill"></i>
+      </button>
+      <p class="ms-4">{{article.like_users.all|length}} </p>
       {% else %}
-        <input class="like-button" type="submit" value="좋아요">
+        {% comment %} <input class="like-button" type="submit" value="좋아요"> {% endcomment %}
+        <button class="like-button m-0" title="좋아요" type="submit">
+          <i class="ri-heart-line heart-icon"></i>
+        </button> 
+        <p class="ms-4">{{article.like_users.all|length}} </p>
+        
       {% endif %}
     </form>
-    <button class="like-button" title="좋아요">
-      <i class="ri-heart-line heart-icon"></i>
-    </button>
-    <button class="like-button" title="스크랩">
-      <i class="ri-bookmark-line"></i>
-    </button>
+
+      <form action="{% url 'articles:scrap' article.pk %}" method="POST">
+        {% csrf_token %}
+        {% if request.user in article.scrap.all %}
+        <button class="like-button m-0" title="스크랩 취소" type="submit">
+          <i class="ri-bookmark-fill bookmark-fill"></i>
+        </button>
+        <p class="ms-4">{{article.scrap.all|length}} </p>
+        {% else %}
+        <button class="like-button m-0" title="스크랩" type="submit">
+          <i class="ri-bookmark-line"></i>
+        </button>
+        <p class="ms-4">{{article.scrap.all|length}} </p>  
+        {% endif %}
+      </form>
+  
+    
   </div>
 
 </div>
