@@ -95,7 +95,7 @@
 
             <!-- 만약 유저가 올린 사진이 있다면 -->
             {% if article.image %}
-            <div class='card-image' style='border-radius: 5px;'>
+            <div class='card-image'>
               <div>
                 <form action="{% url 'articles:scrap' article.pk %}" metgod='POST'>
                   {% csrf_token %} 
@@ -109,7 +109,7 @@
                 </form>
               </div>
 
-              <img src="{{ article.image.url }}" class="card-img-top" alt="...">
+              <img src="{{ article.image.url }}" class="card-img-top" style='width: 100%; height: 220px; border-radius: 8px;' alt="...">
 
             </div>
 
@@ -128,7 +128,7 @@
               </form>
               
               <!-- 카드 사진 부분 -->
-              <div class="no-img-bg d-flex justify-content-center align-items-center" style="width: 100%; height: 100%; border-radius: 5px;">
+              <div class="no-img-bg d-flex justify-content-center align-items-center" style="width: 100%; height: 100%; border-radius: 8px;">
                 <div class='m-4 no-img-text text-center'>{{ article.title }}</div>
               </div>
             </div>
@@ -138,7 +138,7 @@
             
 
             {% comment %} 카드 바디 {% endcomment %}
-            <div class="card-body">
+            <div class="card-body" style='padding-top: 13px;'>
               <div class='text-center text_color'>
                 <p class='text_title'>{{ article.title }}</p>
                 <p class='text_user'>{{ article.user.nickname }}</p>
@@ -149,17 +149,107 @@
 
           </a>
         </div>
-        
         {% endfor %}
 
+          {% comment %}
+          <!-- 이 방법이 당연히 아니었다 ㅋㅎ -->
+
+          {% for result in search_result %}
+
+            <!-- 상품 사진 o, 리뷰 사진 o -->
+            {% if result.main_image %}
+              {% if result.image %}
+              <img src="{{ result.main_image.url }}" alt="...">
+              <img src="{{ result.image.url }}" alt="...">
+
+              <!-- 상품 사진 o, 리뷰 사진 x -->
+              {% elif result.image is null %}
+              <img src="{{ result.main_image.url }}" alt="...">
+              <p>{{ result.title }}</p>  
+
+              <!-- 상품 사진 o, 리뷰 사진 x ????? -->
+              {% else %}
+              <p>{{ result.title }}</p>
+              <img src="{{ result.main_image.url }}" alt="...">
+              {% endif %}
+
+            {% else %}
+            <!-- 상품 사진 x, 리뷰 사진 o -->
+              {% if result.image %}
+              <img src="{{ result.image.url }}" alt="...">
+              <!-- 상품 사진 x, 리뷰 사진 x -->
+              {% else %}
+              <p>{{ result.title }}</p>
+              {% endif %}
+            {% endif %}
+          {% endfor %} {% endcomment %}
+
+      </div>
+    </div>
+
+    {% comment %} 검색 결과 출력 {% endcomment %}
+    <div class='container'>
+      <div class='row justify-content-center '>
+
         {% for result in search_result %}
-          {% if result.image %}
-            <img src="{{ result.image.url }}" alt="...">
-          {% endif %}
-          {% if result.main_image %}
-            <img src="{{ result.main_image.url }}" alt="...">
+        <!-- 상품 사진 o -->
+        {% if result %}
+            {% if result.main_image %}
+              <div class='m-3 d-flex justify-content-center' style='width: 300px;'>
+
+                
+                <!-- 상품 상세 페이지 링크 연결해야함 -->
+                <!-- product pk 값을 받아와야 함 -->
+                <a href="#">
+                  <img src="{{ result.main_image.url }}" style='border-radius: 8px;' alt="">
+                  <p style='font-weight: bold;'>{{ result.product_name }}</p>
+                  <p>{{ result.price }} 원</p>
+                </a>
+              </div>
+            
+
+            <!-- 리뷰 사진 o -->
+            {% elif result.image %}
+              <div class="card p-0 m-3" style="width: 286px; height: 330px; border-radius: 8px;">
+                <a href="{% url 'articles:detail' result.pk %}" style='text-decoration:none;'>
+                  <div class="card-img-top">
+                    <img src="{{ result.image.url }}" style="width: 100%; height: 190px; border-radius: 8px;" alt="...">
+                  </div>
+
+                  <div class="card-body" >
+                    <div class="card-text">
+                      <p style='font-size: 15px; color: gray;'>리뷰</p>
+                      <p class='mb-1 mt-1' style='font-size: 18px; font-weight: bold;'>{{ result.title }}</p>
+                      <p style='font-size: 15px; font-weight: bold;'>{{ user.nickname }}</p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+
+            <!-- 리뷰 사진 x -->
+            {% else %}
+              <div class="card p-0 m-3 d-flex" style="width: 286px; height: 330px; border-radius: 8px;">
+                <a href="{% url 'articles:detail' result.pk %}" style='text-decoration:none;'>
+
+                  <div class="card-img-top d-flex justify-content-center align-items-center" style="width: 284px; height: 190px; border-radius: 8px; background-color: #FFF8D6;">
+                    <div style='font-size: 20px; font-weight: bold; color: #495c40;'>{{ result.title }}</div>
+                  </div>
+
+                  <div class="card-body" >
+                    <div class="card-text">
+                      <p style='font-size: 15px; color: gray;'>리뷰</p>
+                      <p class='mb-1 mt-1' style='font-size: 18px; font-weight: bold;'>{{ result.title }}</p>
+                      <p style='font-size: 15px; font-weight: bold;'>{{ user.nickname }}</p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            {% endif %} 
           {% endif %}
         {% endfor %}
+    
+        
       </div>
     </div>
   </div>

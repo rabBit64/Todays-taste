@@ -20,6 +20,8 @@ ul, p{
   align-items:center;
   max-width: 1256px;
   margin: 0 auto;
+  background-color: white;
+  z-index:1;
 }
 .category-menu{
   display:flex;

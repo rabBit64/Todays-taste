@@ -16,8 +16,10 @@ def init(request):
 
 
 
+# product pk 값을 받아와야 함
 def index(request):
     articles = Article.objects.order_by('-pk')
+    
     page = request.GET.get('page', '1')
     per_page = 9
     paginator = Paginator(articles, per_page)
@@ -143,6 +145,31 @@ def detail(request,article_pk):
 
 
 
+# 상품 상세페이지
+def product_detail(request, product_pk):
+    product = Product.objects.get(pk=product_pk)
+
+    # 제품 사진들 불러와야 함 (아래 코드는 틀린 코드)
+    product_img = ProductImages.objects.all()
+
+    if request.user.is_authenticated:
+        nickname = request.user.nickname
+        context = {
+            'product': product,
+            'product_img': product_img,
+            'nickname' : nickname,
+        }
+    else:
+         context = {
+            'product': product,
+            'product_img': product_img,
+        }
+
+    return render(request,'articles/product_detail.html',context)
+
+
+
+
 @login_required
 def update(request,article_pk):
     article = Article.objects.get(pk=article_pk)
@@ -209,7 +236,7 @@ def likes(request, article_pk):
         article.like_users.remove(request.user)
     else:
         article.like_users.add(request.user)
-    return redirect('articles:index')
+    return redirect('articles:detail', article_pk)
 
 @login_required
 def scrap(request, article_pk):
@@ -219,7 +246,7 @@ def scrap(request, article_pk):
         article.scrap.remove(request.user)
     else:
         article.scrap.add(request.user)
-    return redirect('articles:index')
+    return redirect('articles:detail', article_pk)
 
 
 
@@ -238,6 +265,7 @@ def scrap(request, article_pk):
 #     }
 #     print()
 #     return render(request, 'articles/index.html', context)
+
 def search(request):
     query = request.GET.get('q', '')
     if query:
@@ -263,6 +291,10 @@ def search(request):
     return render(request, 'articles/index.html', context)
 
 
+
+
+
+# product pk 값을 받아와야 함
 def category(request,subject):
     products = Product.objects.filter(category__contains=subject)
     page = request.GET.get('page', '1')
@@ -276,6 +308,13 @@ def category(request,subject):
         'page_num' : page_num,
     }
     return render(request, 'articles/category.html', context)
+
+
+
+
+
+
+
 
 #관리자 상품 업로드
 # def addProduct(request):
