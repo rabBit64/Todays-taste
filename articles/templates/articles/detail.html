@@ -16,7 +16,6 @@
         <p>{{ article.time_since_created }}</p>
       </div>
 
-      <!--수정필요-->
       {% if request.user != article.user %}
         <form action="{% url 'accounts:follow' article.user.pk %}" method='POST'>
           {% csrf_token %}
@@ -127,22 +126,23 @@
       {% endif %}
     </form>
 
-      <form action="{% url 'articles:scrap' article.pk %}" method="POST">
-        {% csrf_token %}
-        {% if request.user in article.scrap.all %}
-        <button class="like-button m-0" title="스크랩 취소" type="submit">
-          <i class="ri-bookmark-fill bookmark-fill"></i>
-        </button>
-        <p class="ms-4">{{article.scrap.all|length}} </p>
-        {% else %}
-        <button class="like-button m-0" title="스크랩" type="submit">
-          <i class="ri-bookmark-line"></i>
-        </button>
-        <p class="ms-4">{{article.scrap.all|length}} </p>  
-        {% endif %}
-      </form>
+    <form action="{% url 'articles:scrap' article.pk %}" method="POST">
+      {% csrf_token %}
+      {% if request.user in article.scrap.all %}
+      <button class="like-button m-0" title="스크랩 취소" type="submit">
+        <i class="ri-bookmark-fill bookmark-fill"></i>
+      </button>
+      <p class="ms-4">{{article.scrap.all|length}} </p>
+      {% else %}
+      <button class="like-button m-0" title="스크랩" type="submit">
+        <i class="ri-bookmark-line"></i>
+      </button>
+      <p class="ms-4">{{article.scrap.all|length}} </p>  
+      {% endif %}
+    </form>
   </div>
-
+</div>
+</div>
 </div>
 
   

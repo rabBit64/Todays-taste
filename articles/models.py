@@ -28,15 +28,15 @@ class Article(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     image = ProcessedImageField(blank=True, null=True,
                                 upload_to='img/',
-                                processors=[ResizeToFill(288, 220)],
-                                format='JPEG',
-                                options={'quality': 90})
+                                processors=[ResizeToFill(300, 300)],
+                                format='JPEG')
+                                # options={'quality': 90})
     # image = models.ImageField(upload_to='img/',blank=True, null=True,)
     # deadline = models.DateTimeField(auto_now=True)
     # 상품 지정
-    # review_product = models.OneToOneField(Product, on_delete=models.DO_NOTHING)
+    review_product = models.OneToOneField(Product, on_delete=models.DO_NOTHING, null=True)
     # 별점 추가
-    # star_ranking = models.IntegerField(default=0)
+    star_ranking = models.IntegerField(default=0)
     # 시간 설정
     def time_since_created(self):
         time_difference = timezone.now() - self.created_at
