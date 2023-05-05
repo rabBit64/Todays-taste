@@ -18,9 +18,9 @@
 
       <!--수정필요-->
       {% if request.user != article.user %}
-        <form action="{% url 'accounts:follow' article.pk %}" method='POST'>
+        <form action="{% url 'accounts:follow' article.user.pk %}" method='POST'>
           {% csrf_token %}
-          {% if request.user in article.followers.all %}
+            {% if request.user in article.user.followers.all %}
               <button class="follow-button" type='submit'>
                 <span><i class="ri-add-line"></i></span> 
                 <span style="margin-right:5px;">언팔로우</span>
@@ -30,8 +30,9 @@
                 <span><i class="ri-add-line"></i></span>
                 <span style="margin-right:5px;">팔로우</span>
               </button> 
+            {% endif %}
         </form>
-          {% endif %}
+        
 
       {% else %}
         <div class="edit-section">
