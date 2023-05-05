@@ -60,7 +60,9 @@
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                      팔로워 목록
+                      {% for follow in person.followers.all %}
+                      <div>{{follow.nickname}}</div>
+                      {% endfor %}
                     </div>
                   </div>
                 </div>
@@ -77,7 +79,9 @@
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                      팔로잉 목록
+                      {% for followings in person.followings.all %}
+                        <div>{{followings.nickname}}</div>
+                      {% endfor %}
                     </div>
                   </div>
                 </div>
@@ -96,7 +100,9 @@
                   </li>
                   <li style='line-height:59px; color:#F2F2F2;'><b>|</b></li>
                   <li role="presentation">
-                    <button class="profile-tab-button" id="button-following-tab" data-bs-toggle="pill" data-bs-target="#button-ollowing" type="button" role="tab" aria-controls="button-ollowing" aria-selected="false">리뷰 상품 {{articles.all|length}}</button>
+                    <button class="profile-tab-button" id="button-following-tab" data-bs-toggle="pill" data-bs-target="#button-ollowing" type="button" role="tab" aria-controls="button-ollowing" aria-selected="false">
+                      리뷰 상품 {{ review_count }}
+                  </button>           
                   </li>
                 </ul>
               </div>
@@ -272,4 +278,6 @@
 {% for article in person.scrapped_articles.all %}
   <div>{{ article.title }}</div>
 {% endfor %} {% endcomment %}
+
+
 {% endblock content %}
