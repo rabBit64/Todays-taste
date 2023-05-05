@@ -86,7 +86,7 @@ def profile(request,username):
 @login_required
 def follow(request, user_pk):
     User = get_user_model()
-    you = User.objects.get(pk=user_pk)
+    you = User.objects.get(pk=user_pk) #article 유저
     me = request.user
 
     if you!=me:
@@ -101,6 +101,7 @@ def follow(request, user_pk):
             'following_count':you.followings.count(),
             'followers_count':you.followers.count(),
         }
-        return JsonResponse(context)
-    return redirect('accounts:profile',context)
+        # return JsonResponse(context)
+        return redirect('articles:detail',user_pk)
+    return redirect('articles:detail',user_pk)
 
