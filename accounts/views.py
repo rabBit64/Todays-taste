@@ -9,6 +9,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from articles.models import Article
 
+
+
+
 def login(request):
     if request.user.is_authenticated:
         return redirect('articles:index')
@@ -24,6 +27,9 @@ def login(request):
         'form': form,
     }
     return render(request, 'accounts/login.html', context)
+
+
+
 
 @login_required
 def logout(request):
@@ -44,6 +50,9 @@ def signup(request):
     }
     return render(request, 'accounts/signup.html', context)
 
+
+
+
 @login_required
 def profile(request,pk):
     User_detail = get_user_model().objects.get(pk=pk)
@@ -51,6 +60,9 @@ def profile(request,pk):
         'User_detail':User_detail,
     }
     return render(request,'accounts/profile.html',context)
+
+
+
 
 @login_required
 def update(request):
@@ -66,12 +78,18 @@ def update(request):
     }
     return render(request,'accounts/update.html', context)
 
+
+
+
 @login_required
 def delete(request):
     user = request.user
     user.delete()
     logout(request)
     return redirect(request,'articles:index')
+
+
+
 
 def profile(request,username):
     User = get_user_model()
@@ -83,6 +101,10 @@ def profile(request,username):
     }
     return render(request,'accounts/profile.html',context)
 
+
+
+
+# 게시글 작성 유저 팔로우 ajax
 @login_required
 def follow(request, user_pk):
     User = get_user_model()
@@ -98,10 +120,10 @@ def follow(request, user_pk):
             is_followed=True
         context = {
             'is_followed':is_followed,
-            'following_count':you.followings.count(),
-            'followers_count':you.followers.count(),
+            # 'following_count':you.followings.count(),
+            # 'followers_count':you.followers.count(),
         }
-        # return JsonResponse(context)
-        return redirect('articles:detail',user_pk)
-    return redirect('articles:detail',user_pk)
+        return JsonResponse(context)
+        # return redirect('articles:detail',user_pk)
+    return redirect('articles:detail',user_pk,context)
 
