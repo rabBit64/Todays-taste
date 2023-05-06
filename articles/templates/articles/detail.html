@@ -6,9 +6,6 @@
 {% block content %}
 {% load static %}
 
-
-
-<!--게시글 제목-->
 <div class="content-detail-section">
   <!--헤더-->
   <div class="content-detail-header">
@@ -19,7 +16,8 @@
         <p>{{ article.time_since_created }}</p>
       </div>
 
-        <!--팔로우 & 언팔-->
+
+        <!--팔로우 & 언팔 수정 _ 수정 필요-->
         {% if request.user != article.user %}
           <form id='follow-form' data-user-id="{{ article.user.pk }}">
             {% comment %} <form id='follow-form' data-user-id="{{ article.user.pk }}" action="{% url 'accounts:follow' article.pk %}" method='POST'> {% endcomment %}
@@ -34,39 +32,69 @@
           </form>
           
 
-        {% else %}
-          <div class="edit-section">
-            <button type="button" aria-label="수정하기, 삭제하기 버튼열기" onclick="openButton()">
-              <i class="ri-more-fill">
-              <div class="dropdown-content" id="mydropdown">
-                <a href="{% url 'articles:update' article.pk %}" method='POST' class="dropdown-text">수정하기</a>
-                <form action="{% url 'articles:delete' article.pk %}" method='POST'>
-                    {% csrf_token %}
-                    <input type="submit" value='삭제하기' class="dropdown-text" style="color: rgb(255, 119, 119);">
-                </form>
-              </div>
-            </i>
-            </button>
-          </div>
-        {% endif %}
-    </div>
-    <!--본문-->
-    <div>
-      {% if article.image %}
-      <img src="{{ article.image.url }}" alt="image" style="width: 100%">
+      {% comment %} 팔로우 수정 전
+      {% if request.user != article.user %}
+        <form action="{% url 'accounts:follow' article.user.pk %}" method='POST'>
+          {% csrf_token %}
+            {% if request.user in article.user.followers.all %}
+              <button class="follow-button" type='submit'>
+                <span><i class="ri-add-line"></i></span> 
+                <span style="margin-right:5px;">언팔로우</span>
+              </button>
+            {% else %}
+              <button class="follow-button" type='submit'>
+                <span><i class="ri-add-line"></i></span>
+                <span style="margin-right:5px;">팔로우</span>
+              </button> 
+            {% endif %}
+        </form>
+        {% endcomment %}
+        
+
+
       {% else %}
-      <img src="{% static 'No_img.webp' %}" alt="image" style="width: 100%">
+        <div class="edit-section">
+          <button type="button" aria-label="수정하기, 삭제하기 버튼열기" onclick="openButton()">
+            <i class="ri-more-fill">
+            <div class="dropdown-content" id="mydropdown">
+              <a href="{% url 'articles:update' article.pk %}" method='POST' class="dropdown-text">수정하기</a>
+              <form action="{% url 'articles:delete' article.pk %}" method='POST'>
+                  {% csrf_token %}
+                  <input type="submit" value='삭제하기' class="dropdown-text" style="color: rgb(255, 119, 119);">
+              </form>
+            </div>
+          </i>
+          </button>
+        </div>
       {% endif %}
     </div>
-    <div>{{ article.content }}</div>
-    <!--좋아요수, 스크랩수, 댓글수, 조회수-->
-    <div class="content-detail-stat">
-      <p class="content-detail-stat-item">좋아요 {{article.like_users.all|length}} </p>
-      <p class="content-detail-stat-item">스크랩 {{article.scrap.all|length}}</p>
-      <p class="content-detail-stat-item">댓글 {{comments|length}}</p>
-      <p class="content-detail-stat-item">조회 {{article.view_count}} </p>
+    <!--본문-->
+  </div>
+  <div>
+    {% if article.image %}
+    <img src="{{ article.image.url }}" alt="image" style="width: 100%">
+    {% else %}
+    <img src="{% static 'No_img.webp' %}" alt="image" style="width: 100%">
+    {% endif %}
+  </div>
+  <div>{{ article.content }}</div>
+  <!--좋아요수, 스크랩수, 댓글수, 조회수-->
+  <div class="content-detail-stat">
+    <p class="content-detail-stat-item">좋아요 {{article.like_users.all|length}} </p>
+    <p class="content-detail-stat-item">스크랩 {{article.scrap.all|length}}</p>
+    <p class="content-detail-stat-item">댓글 {{comments|length}}</p>
+    <p class="content-detail-stat-item">조회 {{article.view_count}} </p>
+  </div>
+  <!--댓글-->
+  <div class="comment-section">
+    <div style="margin-top:3px;">
+      <p>댓글
+        <span class="comment-count">{{comments|length}} </span>
+      </p>
     </div>
-    <!--댓글-->
+
+
+    <!--댓글 수정 전
     <div class="comment-section">
       <div style="margin-top:3px;">
         <p>댓글
@@ -90,19 +118,61 @@
               <i class="ri-heart-line"></i>
               <a href="#"><span class="like-text">좋아요</span></a>
             </button>
-          </div>
+          </div> -->
+
+
+    <!-- 댓글 수정 후 -->
+    <form class="comment-box" action="{% url 'articles:create_comment' article.pk %}" method='POST'>
+      {% csrf_token %}
+      {{ comment_form }}
+      <input type="submit" value='댓글 작성'>
+    </form>
+    <div>
+      {% for comment in comments %}
+      <b><div>{{ comment.user }}</div></b>
+      <div>{{ comment.content }}</div>
+      <div class='d-flex justify-content-between'>
+
         <div>
-          <form action="{% url 'articles:comment_delete' article.pk comment.pk %}">
-            <input style='font-size:12px;' type="submit" value='삭제'>
+          <div class="comment-time">{{ comment.time_since_created }} 전</div>
+          <!--댓글좋아요 / 댓글 ajax 추가-->
+          <form action="{% url 'articles:comment_like' article.pk comment.pk %}" data-comment-id="{{ comment.pk }}" data-article-id="{{article.pk}}" class="comment-like-forms" method="POST">
+            {% csrf_token %}
+              {% if  request.user in comment_all.pk.like_users.all %}
+                {% comment %} <i class="ri-heart-line"></i>
+                <input type="submit" value="좋아요취소" id="comment-like-{{ comment.pk }}"> {% endcomment %}
+                <button type="submit" class="unlike-comment" id="comment-like-{{ comment.pk }}">
+                  <i class="ri-heart-fill"></i>
+                  <span class="like-text">안좋아요</span>
+                   <!--수정필요-->
+                   <div style="margin-left:3px">{{comment.like_users.all|length}}</div>
+                </button>
+              {% else %}
+                {% comment %} <input type="submit" value="좋아요" id="comment-like-{{ comment.pk }}">  {% endcomment %}
+                <button type="submit" class="like-comment" id="comment-like-{{ comment.pk }}">
+                  <i class="ri-heart-line"></i>
+                  <span class="like-text">좋아요</span>
+                  <!--수정필요-->
+                  <div style="margin-left:3px">{{comment.like_users.all|length}}</div>
+                </button>
+                
+              {% endif %}
+              
+              
           </form>
         </div>
+      <div>
+        <form action="{% url 'articles:comment_delete' article.pk comment.pk %}">
+          <input style='font-size:12px;' type="submit" value='삭제'>
+        </form>
       </div>
-    </div>  
-      <hr>
-      {% endfor %}
-  </div>
+    </div>
+  </div>  
+  <hr>
+  {% endfor %}
     
   
+<!-- 좋아요 수정 -- >
   {% comment %} 리뷰 글 좋아요 수 ajax 안먹음 수정 필요  {% endcomment %}
   <div class="content-sidebar">
     <p id="liked-count" class="ms-4">{{article.like_users.all|length}} </p>
@@ -136,28 +206,44 @@
         </button> 
         <p class="ms-4">{{article.like_users.all|length}} </p>
         
+        
       {% endif %}
     </form>
     -->
 
+  <!-- 좋아요 수정 전? -- >
+  <!--
+  <div class="content-sidebar" id="sidebar">
+    <form action="{% url 'articles:likes' article.pk %}" method="POST" class="mb-4">
+      {% csrf_token %}
+      {% if request.user in article.like_users.all %}
+        {% comment %} <input class="like-button" type="submit" value="좋아요 취소"> {% endcomment %}
+         <button class="like-button m-0" title="좋아요 취소" type="submit">
+          <i class="ri-heart-fill heart-fill heart-icon"></i>
+        </button> 
+        <p class="ms-4">{{article.like_users.all|length}} </p>
+         -- >
 
 
-      <form action="{% url 'articles:scrap' article.pk %}" method="POST">
-        {% csrf_token %}
-        {% if request.user in article.scrap.all %}
-        <button class="like-button m-0" title="스크랩 취소" type="submit">
-          <i class="ri-bookmark-fill bookmark-fill"></i>
-        </button>
-        <p class="ms-4">{{article.scrap.all|length}} </p>
-        {% else %}
-        <button class="like-button m-0" title="스크랩" type="submit">
-          <i class="ri-bookmark-line"></i>
-        </button>
-        <p class="ms-4">{{article.scrap.all|length}} </p>  
-        {% endif %}
-      </form>
+
+
+    <form action="{% url 'articles:scrap' article.pk %}" method="POST">
+      {% csrf_token %}
+      {% if request.user in article.scrap.all %}
+      <button class="like-button m-0" title="스크랩 취소" type="submit">
+        <i class="ri-bookmark-fill bookmark-fill bookmark-icon"></i>
+      </button>
+      <p class="ms-4">{{article.scrap.all|length}} </p>
+      {% else %}
+      <button class="like-button m-0" title="스크랩" type="submit">
+        <i class="ri-bookmark-line bookmark-icon"></i>
+      </button>
+      <p class="ms-4">{{article.scrap.all|length}} </p>  
+      {% endif %}
+    </form>
   </div>
-
+</div>
+</div>
 </div>
 
   
@@ -235,21 +321,89 @@
 
 <br>
 
-
-
 <a href="{% url 'articles:index' %}">뒤로가기</a>
 
 <hr>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-  function openButton(){
-    document.getElementById("mydropdown").classList.toggle("show");
-    console.log(document.getElementById("mydropdown"))
+function openButton(){
+  document.getElementById("mydropdown").classList.toggle("show");
+  console.log(document.getElementById("mydropdown"))
+}
+//댓글 좋아요 비동기 요청
+const commentLikeForms = document.querySelectorAll('.comment-like-forms')
+console.log(commentLikeForms)
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+commentLikeForms.forEach((form) => {
+  form.addEventListener('submit', function(event) {
+    //이벤트 기본동작 취소
+    event.preventDefault()
+    console.log("로그를 찍어보자")
+    console.log(event.target)
+    console.log(event.target.dataset)
+    console.log(event.target.dataset.commentId)
+    console.log(event.target.dataset.articleId)
+    const commentId = event.target.dataset.commentId
+    const articleId = event.target.dataset.articleId
+    axios({
+      method: 'post',
+      url: `http://127.0.0.1:8000/articles/${articleId}/comments/${commentId}/comment_like/`,
+      headers: {'X-CSRFToken': csrftoken},
+    }).then((response) => {        
+      const isCommentLiked = response.data.is_comment_liked
+      console.log(isCommentLiked)        
+      const commentLikeBtn = document.querySelector(`#comment-like-${commentId}`)
+      const commentLikeCnt = document.querySelector(`#comment-like-${commentId} > div`)
+      const commentLikeTxt = document.querySelector(`#comment-like-${commentId} > span`)
+      const commentLikeIcon = document.querySelector(`#comment-like-${commentId} > i`)
+      console.log(commentLikeBtn)
+      if (isCommentLiked === true) {
+        //commentLikeBtn.value = '좋아요 취소'
+        console.log(commentLikeCnt.textContent)
+        commentLikeTxt.textContent = '좋아요 취소'
+        commentLikeCnt.textContent={{comment.like_users.all|length}}
+        commentLikeIcon.classList.add('ri-heart-fill')
+        commentLikeIcon.classList.remove('ri-heart-line')
+      
+      } else {
+        //commentLikeBtn.value = '좋아요'
+        console.log(commentLikeCnt.textContent)
+        commentLikeTxt.textContent = '좋아요'
+        commentLikeCnt.textContent={{comment.like_users.all|length}}
+        commentLikeIcon.classList.add('ri-heart-line')
+        commentLikeIcon.classList.remove('ri-heart-fill')
+      }
+    }).catch((error) => {
+      console.log(error.response)
+    })
+  })
+})
+
+
+//사이드바 숨김
+const contentSidebar = document.getElementById('sidebar')
+const hideme = "hideme";
+console.log(contentSidebar)
+window.addEventListener("scroll", () =>{
+  const currentScroll = window.pageYOffset;
+  //만약 밑에서 400px 위에 있으면 숨김
+  console.log(currentScroll)
+  //console.log("window",$(window).height())
+  console.log("document",document.body.scrollHeight)
+  console.log("offset",document.body.scrollHeight-currentScroll)
+  var curOffset = document.body.scrollHeight-currentScroll
+  if (curOffset<990){
+    console.log("실행은됨")
+    contentSidebar.classList.add(hideme);
+  }else{
+    contentSidebar.classList.remove(hideme);
   }
+ });
 
 
 
+// follow ajax 관련
   const form = document.querySelector('#follow-form')
   const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
   form.addEventListener('submit', function (event) {
@@ -275,6 +429,7 @@
 
 
 
+// 리뷰 좋아요 ajax 관련
   const like_form = document.querySelectorAll('.like-forms')
   {% comment %} const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value {% endcomment %}
 
@@ -306,9 +461,6 @@
 
     })
   })
-
-
-
 
 
 </script>

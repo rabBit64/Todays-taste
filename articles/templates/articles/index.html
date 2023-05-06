@@ -9,7 +9,7 @@
 
 
 {% block content %}
-{% if request.user.is_authenticated %}
+{% comment %} {% if request.user.is_authenticated %}
   <h1>Main - <a href="{% url 'accounts:profile' user.username %} ">{{ nickname }}</a></h1>
   <form action="{% url 'accounts:logout' %}" method='POST'>
     {% csrf_token %}
@@ -21,25 +21,9 @@
   </form>
 {% else %}
 <h1>Main - {{ user }}</a></h1>
-{% endif %}
+{% endif %} {% endcomment %}
 {% load static %}
 
-{% comment %} <h1>Main - {{ user }}</h1>
-<p>
-    <a href="{% url 'articles:create' %}">리뷰 작성</a>
-</p>
-<div>
-    {% if request.user.is_authenticated %}
-    <form action="{% url 'accounts:logout' %}" method=='POST'>
-        {% csrf_token %}
-        <input type="submit" value='로그아웃'>
-    </form>
-    
-    {% else %}
-        <a href="{% url 'accounts:signup' %}">회원가입</a>
-        <a href="{% url 'accounts:login' %}">로그인</a>
-    {% endif %}
-</div> {% endcomment %}
 
 
 <div class='main-c mt-3'>

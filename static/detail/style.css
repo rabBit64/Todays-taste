@@ -156,6 +156,16 @@ button{
   font-size:24px;
   line-height:1;
 }
+.bookmark-icon{
+  display:inline-block;
+  font-size:24px;
+  color:#F7E1AE;
+}
+@media(max-width:1150px){
+  .content-sidebar{
+    display:none;
+  }
+}
 .heart-fill{
   display:inline-block;
   font-size:24px;
@@ -165,4 +175,13 @@ button{
   display:inline-block;
   font-size:24px;
   color:#F7E1AE;
+}
+.ri-heart-fill{
+  color:#F7E1AE;
+}
+.ri-heart-line{
+  color:#F7E1AE;
+}
+.hideme{
+  opacity:0;
 }

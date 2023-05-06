@@ -18,7 +18,6 @@ def login(request):
     if request.method == 'POST':
         form = CustomAuthenticationForm(request, request.POST)
         if form.is_valid():
-            print(request.user)
             auth_login(request, form.get_user()) 
             return redirect('articles:index')
     else:
@@ -39,7 +38,6 @@ def logout(request):
 def signup(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
-        print(form)
         if form.is_valid():
             form.save()
             return redirect('accounts:login')
@@ -60,6 +58,7 @@ def profile(request,pk):
         'User_detail':User_detail,
     }
     return render(request,'accounts/profile.html',context)
+
 
 
 
@@ -91,20 +90,29 @@ def delete(request):
 
 
 
+@login_required
 def profile(request,username):
-    User = get_user_model()
-    person = User.objects.get(username=username)
+    person = get_user_model().objects.get(username=username)
+    review_count = Article.objects.filter(user=person).count()
     articles = Article.objects.all()
+    review_count = 0
+    for article in articles:
+        if article.user == request.user:
+            review_count += 1
+
     context = {
-        'person':person,
+        'User_detail':person,
+        'review_count' : review_count,
         'articles' : articles,
+        'person' : person,
     }
+    print(review_count)
     return render(request,'accounts/profile.html',context)
 
 
 
 
-# 게시글 작성 유저 팔로우 ajax
+# 리뷰 작성 유저 팔로우 ajax_수정 필요
 @login_required
 def follow(request, user_pk):
     User = get_user_model()
@@ -123,7 +131,14 @@ def follow(request, user_pk):
             # 'following_count':you.followings.count(),
             # 'followers_count':you.followers.count(),
         }
+
         return JsonResponse(context)
         # return redirect('articles:detail',user_pk)
     return redirect('articles:detail',user_pk,context)
+
+        # main
+        # return JsonResponse(context)
+       # return redirect('articles:detail', user_pk)
+   # return redirect('articles:detail',user_pk)
+
 
