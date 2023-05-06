@@ -180,3 +180,18 @@ ul, p{
   border-radius: 100%;
   outline:none;
 }
+.profile-dropdown{
+position:absolute; 
+right:150px; 
+background-color:white; 
+z-index:1;  
+box-shadow: rgba(63, 71, 77, 0.2) 0px 4px 10px 0px;
+border-radius: 6px;
+width: 120px;
+padding: 8px;
+height:auto;
+display:none;
+}
+.display{
+  display:block;
+}

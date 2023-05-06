@@ -95,17 +95,20 @@
                 <button type="submit" class="unlike-comment" id="comment-like-{{ comment.pk }}">
                   <i class="ri-heart-fill"></i>
                   <span class="like-text">안좋아요</span>
+                   <!--수정필요-->
+                   <div style="margin-left:3px">{{comment.like_users.all|length}}</div>
                 </button>
               {% else %}
                 {% comment %} <input type="submit" value="좋아요" id="comment-like-{{ comment.pk }}">  {% endcomment %}
                 <button type="submit" class="like-comment" id="comment-like-{{ comment.pk }}">
                   <i class="ri-heart-line"></i>
                   <span class="like-text">좋아요</span>
+                  <!--수정필요-->
                   <div style="margin-left:3px">{{comment.like_users.all|length}}</div>
                 </button>
                 
               {% endif %}
-              <!--수정필요-->
+              
               
           </form>
         </div>
