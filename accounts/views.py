@@ -9,6 +9,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from articles.models import Article
 
+
+
+
 def login(request):
     if request.user.is_authenticated:
         return redirect('articles:index')
@@ -23,6 +26,9 @@ def login(request):
         'form': form,
     }
     return render(request, 'accounts/login.html', context)
+
+
+
 
 @login_required
 def logout(request):
@@ -44,6 +50,19 @@ def signup(request):
 
 
 
+
+@login_required
+def profile(request,pk):
+    User_detail = get_user_model().objects.get(pk=pk)
+    context = {
+        'User_detail':User_detail,
+    }
+    return render(request,'accounts/profile.html',context)
+
+
+
+
+
 @login_required
 def update(request):
     if request.method == 'POST':
@@ -58,12 +77,18 @@ def update(request):
     }
     return render(request,'accounts/update.html', context)
 
+
+
+
 @login_required
 def delete(request):
     user = request.user
     user.delete()
     logout(request)
     return redirect(request,'articles:index')
+
+
+
 
 @login_required
 def profile(request,username):
@@ -85,6 +110,9 @@ def profile(request,username):
     return render(request,'accounts/profile.html',context)
 
 
+
+
+# 리뷰 작성 유저 팔로우 ajax_수정 필요
 @login_required
 def follow(request, user_pk):
     User = get_user_model()
@@ -100,10 +128,17 @@ def follow(request, user_pk):
             is_followed=True
         context = {
             'is_followed':is_followed,
-            'following_count':you.followings.count(),
-            'followers_count':you.followers.count(),
+            # 'following_count':you.followings.count(),
+            # 'followers_count':you.followers.count(),
         }
+
+        return JsonResponse(context)
+        # return redirect('articles:detail',user_pk)
+    return redirect('articles:detail',user_pk,context)
+
+        # main
         # return JsonResponse(context)
-        return redirect('articles:detail', user_pk)
-    return redirect('articles:detail',user_pk)
+       # return redirect('articles:detail', user_pk)
+   # return redirect('articles:detail',user_pk)
+
 

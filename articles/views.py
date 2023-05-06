@@ -7,6 +7,9 @@ from accounts.models import User
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 
+# Create your views here.
+
+
 
 
 def init(request):
@@ -15,7 +18,6 @@ def init(request):
 
 
 
-# product pk 값을 받아와야 함
 def index(request):
     articles = Article.objects.order_by('-pk')
     page = request.GET.get('page', '1')
@@ -247,9 +249,21 @@ def likes(request, article_pk):
 
     if article.like_users.filter(pk=request.user.pk).exists():
         article.like_users.remove(request.user)
+        is_liked = False
     else:
         article.like_users.add(request.user)
-    return redirect('articles:detail', article_pk)
+        is_liked = True
+    context = {
+        'is_liked' : is_liked,
+        'liked_count' : article.like_users.count(),
+        # 'liked-count' : article.
+    }
+    return JsonResponse(context)
+    
+    # return redirect('articles:detail', article_pk)
+
+
+
 
 
 @login_required
