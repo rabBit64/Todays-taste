@@ -15,7 +15,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/7c2def04d0.js" crossorigin="anonymous"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'main/navbar.css' %}">
@@ -121,13 +120,18 @@
                 <!--스크랩-->
                 
                 {% endif %}
-                <span class="scrap"><a href="#"><i class="ri-bookmark-line"></i></a></span>
-                <a href="{% url 'articles:create' %}">
-                    <button type="button" class="write-button">
+                <!-- <span class="scrap"><a href="#"><i class="ri-bookmark-line"></i></a></span> -->
+                <!--글쓰기 드롭다운-->
+                <div class="write-section">
+                    <button type="button"  id="my-write-btn" class="write-button">
                         <span id="write-text">글쓰기</span>
                         <span><i class="ri-arrow-down-s-line"></i></span>
                     </button>
-                </a>
+                    <div class="write-dropdown" id="my-write">
+                        <div class="write-menu"><a href="{% url 'articles:create' %}">사진 올리기😋</a></div>
+                        <div class="write-menu"><a href="#">리뷰 작성하기🦖</a></div>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -251,11 +255,21 @@
 const profileBtn = document.getElementById("account-btn");
 console.log(profileBtn)
 const profileBox = document.getElementById("my-profile");
-
-profileBtn.addEventListener('click', () => {
+const writeBtn= document.getElementById("my-write-btn");
+const writeBox = document.getElementById("my-write");
+console.log(writeBox)
+if(profileBtn!=null && profileBtn!==''){
+    profileBtn.addEventListener('click', () => {
     console.log("click")
     profileBox.classList.toggle("display");
     console.log(profileBox)
+    })
+}
+//왜 안먹지.. 수정필요
+writeBtn.addEventListener('click', () => {
+    console.log("click")
+    writeBox.classList.toggle("block-toggle");
+    console.log(writeBox)
 })
 </script>
 </body>
