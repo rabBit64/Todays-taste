@@ -102,6 +102,7 @@
                             <img src="{% static 'smile.png' %}" alt="smile-profile">
                         </picture>
                         <div class="profile-dropdown" id="my-profile">
+                            <div style="margin:5px; text-align:center;"><a href="{% url 'accounts:cart' user.pk %}">장바구니</a></div>
                             <div style="margin:5px; text-align:center;"><a href="{% url 'accounts:profile' user.username %}">마이페이지</a></div>
                             <div style="margin:5px; text-align:center;"><form action="{% url 'accounts:logout' %}" method="POST">
                                 {% csrf_token %}

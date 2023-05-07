@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load humanize %}
+
+<h1 class='ms-5'>내 장바구니</h1>
+
+<hr>
+
+<div class='container'>
+    <div class='row d-flex flex-column'>
+        {% for cart in person.basket_product.all %}
+        <div class='d-flex m-3'>
+            <img src="{{ cart.main_image.url }}" style='border-radius: 8px;' alt="">
+            <div class='d-flex flex-column ms-3'>
+                <p style='font-size: 26px;'>상품명: <span style='font-size: 26px;'>{{ cart.product_name }}</span></p>
+                <p style='font-size: 26px;'>가격: <span style='font-size: 30px; font-weight:bold;'>{{ cart.price | intcomma}}</span> 원</p>
+            </div>
+        </div>
+        <hr class='ms-3 me-3 mt-5 mb-5'>
+        {% endfor %}
+        <button class="btn" style='color:white; background-color: #495c40;' type="button">구매하기</button>
+    </div>
+</div>
+{% endblock content %}
