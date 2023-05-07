@@ -74,59 +74,51 @@
       </p>
     </div>
     
-    <form class="comment-box" action="{% url 'articles:create_comment' article.pk %}" method='POST'>
+   <!-- 댓글 수정 후 -->
+   <form class="comment-box" action="{% url 'articles:create_comment' article.pk %}" method='POST'>
       {% csrf_token %}
       {{ comment_form }}
       <input type="submit" value='댓글 작성'>
     </form>
     <div>
-
-      {% comment %} 댓글 수정 전 (닉네임 출력) {% endcomment %}
-      {% comment %}
-      {% for comment in comments %}
-      <b><div>{{ comment.user.nickname }}</div></b>
-      {% endfor %}
-      {% endcomment %}
-      
-      {% comment %} 댓글 수정 (닉네임 출력x) {% endcomment %}
       {% for comment in comment_all %}
       <b><div>{{ comment.user.nickname }}</div></b>
       <div>{{ comment.content }}</div>
       <div class='d-flex justify-content-between'>
-        <div>
-          <div class="comment-time">{{ comment.time_since_created }} 전</div>
-          <!--댓글좋아요 / 댓글 ajax 추가-->
-          <form data-comment-id="{{ comment.pk }}" data-article-id="{{article.pk}}" class="comment-like-forms" method="POST">
-            {% csrf_token %}
-                {% if request.user in comment.like_users.all %}
-                {% comment %} <i class="ri-heart-line"></i>
-                <input type="submit" value="좋아요취소" id="comment-like-{{ comment.pk }}"> {% endcomment %}
-                <button type="submit" class="like-comment" id="comment-like-{{ comment.pk }}">
-                  <i class="ri-heart-fill"></i>
-                  <span class="like-text">좋아요취소</span>
-                  <!--수정필요-->
-                  <div style="margin-left:3px">{{comment.like_users.all|length}}</div>
-                </button>
-              {% else %}
-                {% comment %} <input type="submit" value="좋아요" id="comment-like-{{ comment.pk }}">  {% endcomment %}
-                <button type="submit" class="like-comment" id="comment-like-{{ comment.pk }}">
-                  <i class="ri-heart-line"></i>
-                  <span class="like-text">좋아요</span>
-                  <!--수정필요-->
-                  <div style="margin-left:3px">{{comment.like_users.all|length}}</div>
-                </button>
-              {% endif %}
-          </form>
+      <div>
+        <div class="comment-time">{{ comment.time_since_created }} 전</div>
+        <!--댓글좋아요 / 댓글 ajax 추가-->
+        <form action="{% url 'articles:comment_like' article.pk comment.pk %}" data-comment-id="{{ comment.pk }}" data-article-id="{{article.pk}}" class="comment-like-forms" method="POST">
+          {% csrf_token %}
+            {% if request.user in comment.pk.like_users.all %}
+              {% comment %} <i class="ri-heart-line"></i>
+              <input type="submit" value="좋아요취소" id="comment-like-{{ comment.pk }}"> {% endcomment %}
+              <button type="submit" class="unlike-comment" id="comment-like-{{ comment.pk }}">
+                <i class="ri-heart-fill"></i>
+                <span class="like-text">좋아요취소</span>
+                 <!--수정필요-->
+                 <div style="margin-left:3px">{{comment.like_users.all|length}}</div>
+              </button>
+            {% else %}
+              {% comment %} <input type="submit" value="좋아요" id="comment-like-{{ comment.pk }}">  {% endcomment %}
+              <button type="submit" class="like-comment" id="comment-like-{{ comment.pk }}">
+                <i class="ri-heart-line"></i>
+                <span class="like-text">좋아요</span>
+                <!--수정필요-->
+                <div style="margin-left:3px">{{comment.like_users.all|length}}</div>
+              </button>
+            {% endif %}
+        </form>
         </div>
       <div>
-        <form action="{% url 'articles:comment_delete' article.pk comment.pk %}">
-          <input style='font-size:12px;' type="submit" value='삭제'>
-        </form>
-      </div>
+      <form action="{% url 'articles:comment_delete' article.pk comment.pk %}">
+        <input style='font-size:12px;' type="submit" value='삭제'>
+      </form>
     </div>
-  </div>  
-  <hr>
-  {% endfor %}
+    {% endfor %}
+  </div>
+</div>  
+<hr>
     
   
   <div class="content-sidebar" id="sidebar">

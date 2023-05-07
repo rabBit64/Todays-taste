@@ -233,9 +233,7 @@ def comment_delete(request, article_pk, comment_pk):
 
     
 def comment_like(request, article_pk,comment_pk):
-    article = Article.objects.get(pk=article_pk)
     comment = Comment.objects.get(pk=comment_pk)
-
     if comment.like_users.filter(pk=request.user.pk).exists():
         comment.like_users.remove(request.user)
         is_comment_liked=False
@@ -245,7 +243,7 @@ def comment_like(request, article_pk,comment_pk):
     context={
         'is_comment_liked': is_comment_liked,
     }
-    #return redirect('articles:detail',article_pk,context)
+    # return redirect('articles:detail',article_pk,context)
     return JsonResponse(context)
 
 @login_required
