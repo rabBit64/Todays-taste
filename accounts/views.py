@@ -7,7 +7,7 @@ from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from articles.models import Article
+from articles.models import Article, Product
 
 
 
@@ -132,4 +132,14 @@ def follow(request, user_pk):
        # return redirect('articles:detail', user_pk)
    # return redirect('articles:detail',user_pk)
 
+
+
+def cart(request, user_pk):
+    person = get_user_model().objects.get(pk=user_pk)
+    product = Product.objects.all()
+    context = {
+        'person' : person,
+        'product' : product,
+    }
+    return render(request,'accounts/cart.html',context)
 
