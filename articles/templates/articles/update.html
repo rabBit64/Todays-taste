@@ -115,23 +115,11 @@ ul, p{
         <p id="logo-text"><a href="{% url 'articles:index' %}">오늘의 취향</a></p>
       </div>
     </div>
-    <div class="container">
-      <div class="start-rating text-center mb-3">
-        {% comment %} <p>별점평가</p>
-        <form class="rate-form" action="#" method="POST" id="#">
-          {% csrf_token %}
-          <button type="submit" class="fa fa-star star-btn" id="first"></button>
-          <button type="submit" class="fa fa-star star-btn" id="second"></button>
-          <button type="submit" class="fa fa-star star-btn" id="third"></button>
-          <button type="submit" class="fa fa-star star-btn" id="fourth"></button>
-          <button type="submit" class="fa fa-star star-btn" id="fifth"></button>
-        </form> {% endcomment %}
-      </div>
-    </div>
 
       <form action="{% url 'articles:update' article.pk %} " method ='POST' enctype="multipart/form-data">
         {% csrf_token %}
         <div class='d-flex justify-content-center'>
+
           <div>
             {{form.as_p}}
           {% comment %} 제목
