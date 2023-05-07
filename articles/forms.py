@@ -1,56 +1,7 @@
 from django import forms
 from .models import Article,Comment,Product
-from django.contrib import admin
 
-
-class ArticleForm(forms.ModelForm):
-    title = forms.CharField(label='제목', label_suffix='', widget=forms.TextInput(
-        attrs={'class': 'form-control', 'style': 'width: 500px;','placeholder': '제목',}))
-    content = forms.CharField(label='리뷰', label_suffix='', widget=forms.Textarea(
-        attrs={'class': 'form-control','style': 'width: 500px; height: 150px;', 'placeholder': '리뷰 작성',}))
-    # image = forms.ImageField(
-    #     widget = forms.FileInput(
-    #         attrs = {"id" : "image_field" , 
-    #                 'style' : "height: 100px; width : 360px;", 
-    #                 }
-    #         )
-    # )
-    class Meta:
-        model = Article
-        fields = ('title','image','content','review_product')
-        # fields = ('title','image','content','star_ranking')
-
-    # title = forms.CharField(
-    #     label='제목',
-    # )
-    # content = forms.CharField(
-    #     label = '내용',
-    # )
-
-    # image = forms.ImageField(
-    #     label = '이미지'
-    # )
-    # class Meta:
-    #     model = Article
-    #     fields = ('title','content','image')
-
-
-class CommentForm(forms.ModelForm):
-    content = forms.CharField(
-        label='',
-        widget=forms.TextInput(
-            attrs={
-                'class': 'form-control',
-                'style': 'width: 100%; display: inline-flex; border:0px;',
-            },
-        ),
-    )
-    class Meta:
-        model = Comment
-        fields = ('content',)
-        label_suffix = ''
-
-
+    
 class ProductForm(forms.ModelForm):
     CATEGORIES= (
         ('가구', '가구'), #가구
@@ -76,11 +27,43 @@ class ProductForm(forms.ModelForm):
         model = Product
         fields = ('product_name', 'price', 'category', 'content',)
 
-    # images = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
-    # product_name = forms.CharField()
-    # price = forms.IntegerField()
-    # category = forms.CharField()
-    # content = forms.CharField(widget=forms.Textarea)
-    # images = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
+ 
+
+class ArticleForm(forms.ModelForm):
+    title = forms.CharField(label='제목', label_suffix='', widget=forms.TextInput(
+        attrs={'class': 'form-control', 'style': 'width: 700px;','placeholder': '제목',}))
+    content = forms.CharField(label='리뷰', label_suffix='', widget=forms.Textarea(
+        attrs={'class': 'form-control','style': 'width: 700px; height: 150px;', 'placeholder': '리뷰를 작성해서 취향을 공유해주세요 :)',}))
+
+    def __init__(self, *args, **kwargs):
+        super(ArticleForm, self).__init__(*args, **kwargs)
+
+        self.fields['review_product'].label_from_instance = self.label_from_instance
+
+    @staticmethod
+    def label_from_instance(obj):
+        return "%s" % obj.product_name
+    
+    class Meta:
+        model = Article
+        fields = ('title','image','content','review_product')
+        # fields = ('title','image','content','star_ranking')
+    
+   
+
+class CommentForm(forms.ModelForm):
+    content = forms.CharField(
+        label='',
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'style': 'width: 100%; display: inline-flex; border:0px;',
+            },
+        ),
+    )
+    class Meta:
+        model = Comment
+        fields = ('content',)
+        label_suffix = ''
 
 

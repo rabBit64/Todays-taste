@@ -152,19 +152,21 @@ def detail(request,article_pk):
 def product_detail(request, product_pk):
     product = Product.objects.get(pk=product_pk)
     product_img = ProductImages.objects.filter(product=product_pk)
-
-
+    product_reviews = Article.objects.filter(review_product=product_pk)
+    print(product_reviews)
     if request.user.is_authenticated:
         nickname = request.user.nickname
         context = {
             'product': product,
             'product_img': product_img,
             'nickname' : nickname,
+            'product_reviews' : product_reviews,
         }
     else:
          context = {
             'product': product,
             'product_img': product_img,
+            'product_reviews' : product_reviews,
         }
          
     

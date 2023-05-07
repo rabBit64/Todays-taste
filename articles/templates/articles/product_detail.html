@@ -126,7 +126,18 @@
             <p class='m-2 mb-4' style='font-size: 28px; font-weight: bold; color: #495c40;'>제품 상세정보</p>
             <p class='m-2'>{{ product.content }}</p>
         </div>
-
+        {% comment %} 제품 리뷰 {% endcomment %}
+        <div>
+            <p class='m-2 mb-4' style='font-size: 28px; font-weight: bold; color: #495c40;'>제품 리뷰</p>
+            {% for review in product_reviews %}
+            <p>{{review.title}}</p>
+            <p>{{review.user.nickname}}</p>
+            {% comment %} <p><img src=  "{% review.image.url %}"></p> {% endcomment %}
+            <p><img src={{review.image.url}}></p>
+            <p>{{review.content}}</p>
+            {% endfor %}
+            
+        </div>
     </div>
 </div>
 

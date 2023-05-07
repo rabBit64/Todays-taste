@@ -146,11 +146,9 @@
         <!-- 상품 사진 o -->
           {% if result %}
             {% if result.main_image %}
-              <div class='m-3 d-flex justify-content-center' style='width: 300px; object-fit: cover;'>
-
-
+              <div class='m-3 d-flex justify-content-center' style='width: 300px; height: 100%; object-fit: cover;'>
                 <a href="{% url 'articles:product_detail' result.pk %}">
-                  <img src="{{ result.main_image.url }}" style='border-radius: 8px; object-fit: cover;' alt="">
+                  <img src="{{ result.main_image.url }}" style='border-radius: 8px; height: 100%; object-fit: cover;' alt="">
                   <p style='font-weight: bold;'>{{ result.product_name }}</p>
                   <p>{{ result.price | intcomma }} 원</p>
                 </a>
@@ -159,10 +157,10 @@
 
             <!-- 리뷰 사진 o -->
             {% elif result.image %}
-              <div class="card p-0 m-3" style="width: 286px; height: 330px; border-radius: 8px; object-fit: cover;">
+              <div class="card p-0 m-3" style="width: 286px; height: 100%; border-radius: 8px; object-fit: cover;">
                 <a href="{% url 'articles:detail' result.pk %}" style='text-decoration:none;'>
                   <div class="card-img-top">
-                    <img src="{{ result.image.url }}" style="width: 100%; height: 220px; border-radius: 8px; object-fit: cover;" alt="...">
+                    <img src="{{ result.image.url }}" style="width: 100%; height: 100%; border-radius: 8px; object-fit: cover;" alt="...">
                   </div>
 
                   <div class="card-body" >
@@ -205,7 +203,7 @@
 </div>
 
   {% comment %} 페이지네이션 컴포넌트 시작 {% endcomment %}
-  <ul class="pagination justify-content-center">
+  <ul class="pagination justify-content-center mt-5">
     {% comment %}
         이전 페이지 버튼
         이전 페이지가 존재할 경우 이전 페이지 버튼 활성화
