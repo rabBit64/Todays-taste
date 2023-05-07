@@ -27,15 +27,15 @@ class Article(models.Model):
     # 조회수
     view_count = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
-    image = ProcessedImageField(blank=True, null=True,
-                                upload_to='img/',
-                                processors=[ResizeToFill(288, 220)],
-                                format='JPEG')
-                                # options={'quality': 90})
-    # image = models.ImageField(upload_to='img/',blank=True, null=True,)
+    # image = ProcessedImageField(blank=True, null=True,
+    #                             upload_to='img/',
+    #                             processors=[ResizeToFill(288, 220)],
+    #                             format='JPEG',
+    #                             options={'quality': 90})
+    image = models.ImageField(upload_to='img/',blank=True, null=True,)
     # deadline = models.DateTimeField(auto_now=True)
     # 상품 지정
-    review_product = models.OneToOneField(Product, on_delete=models.DO_NOTHING, null=True)
+    review_product = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
     # 별점 추가
     # star_ranking = models.IntegerField(default=0)
     # 시간 설정

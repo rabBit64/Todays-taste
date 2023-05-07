@@ -136,11 +136,13 @@ ul, p{
           {% csrf_token %}
           <!--리뷰작성-->
           <div class='justify-content-center'>
-            {% comment %} {{form.as_p}} {% endcomment %}
-            제목
+            {{form.as_p}}
+            {% comment %} 제목
             <div class='mb-3 review-title'>{{form.title}}</div>
             <div>{{ form.image }}</div>
             <div class='mb-3'>{{form.content}}</div>
+            <div>상품지정</div>
+            <div>{{form.review_product}}</div> {% endcomment %}
             {% comment %} <!--별점평가-->
             <div class="start-rating">
               <p>별점평가</p>
