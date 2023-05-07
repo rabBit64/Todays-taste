@@ -62,7 +62,6 @@
   <!--좋아요수, 스크랩수, 댓글수, 조회수-->
   <div class="content-detail-stat">
     <p class="content-detail-stat-item">좋아요 {{article.like_users.all|length}} </p>
-    <p class="content-detail-stat-item">스크랩 {{article.scrap.all|length}}</p>
     <p class="content-detail-stat-item">댓글 {{comments|length}}</p>
     <p class="content-detail-stat-item">조회 {{article.view_count}} </p>
   </div>
@@ -81,7 +80,7 @@
     </form>
     <div>
       {% for comment in comments %}
-      <b><div>{{ comment.user }}</div></b>
+      <b><div>{{ comment.user.nickname }}</div></b>
       <div>{{ comment.content }}</div>
       <div class='d-flex justify-content-between'>
         <div>
@@ -143,7 +142,7 @@
       {% endif %}
     </form>
 
-    <form action="{% url 'articles:scrap' article.pk %}" method="POST">
+    {% comment %} <form action="{% url 'articles:scrap' article.pk %}" method="POST">
       {% csrf_token %}
       {% if request.user in article.scrap.all %}
       <button class="like-button m-0" title="스크랩 취소" type="submit">
@@ -156,7 +155,7 @@
       </button>
       <p class="ms-4">{{article.scrap.all|length}} </p>  
       {% endif %}
-    </form>
+    </form> {% endcomment %}
   </div>
 </div>
 </div>
