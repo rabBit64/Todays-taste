@@ -76,6 +76,16 @@
         <div class='row d-flex flex-row justify-content-center'>
             {% for product in products %}
             <div class='m-3' style='width: 300px;'>
+              <div style='background-color: #F77; position: absolute; border-radius:5px; padding:0 3px;'>
+                <div class="time">
+                    <span style='color:white;' id="d-day-hour-{{ product.pk }}"></span>
+                    <span style='color:white;' class="col">:</span>
+                    <span  style='color:white;' id="d-day-min-{{ product.pk }}"></span>
+                    <span  style='color:white;' class="col">:</span>
+                    <span  style='color:white;' id="d-day-sec-{{ product.pk }}"></span>
+                    <span style='color:white;' class="col" >남음</span>
+                </div>
+              </div>
                 <a href="{% url 'articles:product_detail' product.pk %}">
                     <img src="{{ product.main_image.url }}" style='border-radius: 8px;' alt="">
                     <p class='mt-2 mb-1' style='font-weight: bold;'>{{ product.product_name }}</p>
@@ -140,14 +150,55 @@
   </ul>
   {% comment %} 페이지네이션 컴포넌트 끝 {% endcomment %}
 
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-function priceToString(price) {
+
+{% comment %} function priceToString(price) {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
  
 
 var price = 10000;
 priceToString(price);
+
+ {% endcomment %}
+
+    function remaindTime() {
+        {% for product in products %}
+          var now = new Date();
+          var open = new Date(2023, 04, 12, 00, 00, 00);
+          var nt = now.getTime();
+          var ot = open.getTime();
+          if (nt < ot) {
+            var sec = parseInt((ot - nt) / 1000);
+            var hour = parseInt(sec /3600);
+            sec = sec % 3600;
+            var min = parseInt(sec / 60);
+            sec = sec % 60;
+            if (hour < 10) {
+              hour = "0" + hour;
+            }
+            if (min < 10) {
+              min = "0" + min;
+            }
+            if (sec < 10) {
+              sec = "0" + sec;
+            }
+            $("#d-day-hour-{{ product.pk }}").html(hour);
+            $("#d-day-min-{{ product.pk }}").html(min);
+            $("#d-day-sec-{{ product.pk }}").html(sec);
+          } else {
+            $("#d-day-hour-{{ product.pk }}").html('00');
+            $("#d-day-min-{{ product.pk }}").html('00');
+            $("#d-day-sec-{{ product.pk }}").html('00');
+          }
+        {% endfor %}
+      }
+      setInterval(remaindTime, 1000);
+      </script>
+
 </script>
 
 {% endblock content %}
