@@ -80,23 +80,23 @@
       <input type="submit" value='댓글 작성'>
     </form>
     <div>
-      {% for comment in comments %}
+      {% for comment in comment_all %}
       <b><div>{{ comment.user }}</div></b>
       <div>{{ comment.content }}</div>
       <div class='d-flex justify-content-between'>
         <div>
           <div class="comment-time">{{ comment.time_since_created }} 전</div>
           <!--댓글좋아요 / 댓글 ajax 추가-->
-          <form action="{% url 'articles:comment_like' article.pk comment.pk %}" data-comment-id="{{ comment.pk }}" data-article-id="{{article.pk}}" class="comment-like-forms" method="POST">
+          <form data-comment-id="{{ comment.pk }}" data-article-id="{{article.pk}}" class="comment-like-forms" method="POST">
             {% csrf_token %}
-              {% if  request.user in comment_all.pk.like_users.all %}
+                {% if request.user in comment.like_users.all %}
                 {% comment %} <i class="ri-heart-line"></i>
                 <input type="submit" value="좋아요취소" id="comment-like-{{ comment.pk }}"> {% endcomment %}
-                <button type="submit" class="unlike-comment" id="comment-like-{{ comment.pk }}">
+                <button type="submit" class="like-comment" id="comment-like-{{ comment.pk }}">
                   <i class="ri-heart-fill"></i>
-                  <span class="like-text">안좋아요</span>
-                   <!--수정필요-->
-                   <div style="margin-left:3px">{{comment.like_users.all|length}}</div>
+                  <span class="like-text">좋아요취소</span>
+                  <!--수정필요-->
+                  <div style="margin-left:3px">{{comment.like_users.all|length}}</div>
                 </button>
               {% else %}
                 {% comment %} <input type="submit" value="좋아요" id="comment-like-{{ comment.pk }}">  {% endcomment %}
@@ -106,10 +106,7 @@
                   <!--수정필요-->
                   <div style="margin-left:3px">{{comment.like_users.all|length}}</div>
                 </button>
-                
               {% endif %}
-              
-              
           </form>
         </div>
       <div>
@@ -143,7 +140,7 @@
       {% endif %}
     </form>
 
-    <form action="{% url 'articles:scrap' article.pk %}" method="POST">
+    {% comment %} <form action="{% url 'articles:scrap' article.pk %}" method="POST">
       {% csrf_token %}
       {% if request.user in article.scrap.all %}
       <button class="like-button m-0" title="스크랩 취소" type="submit">
@@ -156,7 +153,7 @@
       </button>
       <p class="ms-4">{{article.scrap.all|length}} </p>  
       {% endif %}
-    </form>
+    </form> {% endcomment %}
   </div>
 </div>
 </div>
@@ -240,44 +237,50 @@
 
 
 <hr>
+
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
+console.log("스크립트 동작")
 function openButton(){
   document.getElementById("mydropdown").classList.toggle("show");
-  console.log(document.getElementById("mydropdown"))
+  //console.log(document.getElementById("mydropdown"))
 }
 //댓글 좋아요 비동기 요청
 const commentLikeForms = document.querySelectorAll('.comment-like-forms')
-console.log(commentLikeForms)
+//console.log(commentLikeForms)
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
 commentLikeForms.forEach((form) => {
   form.addEventListener('submit', function(event) {
     //이벤트 기본동작 취소
     event.preventDefault()
-    console.log("로그를 찍어보자")
-    console.log(event.target)
-    console.log(event.target.dataset)
-    console.log(event.target.dataset.commentId)
-    console.log(event.target.dataset.articleId)
+   // console.log("로그를 찍어보자")
+    //console.log(event.target)
+    //console.log(event.target.dataset)
+    //console.log(event.target.dataset.commentId)
+    //console.log(event.target.dataset.articleId)
     const commentId = event.target.dataset.commentId
     const articleId = event.target.dataset.articleId
     axios({
       method: 'post',
-      url: `http://127.0.0.1:8000/articles/${articleId}/comments/${commentId}/comment_like/`,
+      url: `/articles/${articleId}/comments/${commentId}/comment_like/`,
       headers: {'X-CSRFToken': csrftoken},
     }).then((response) => {        
       const isCommentLiked = response.data.is_comment_liked
-      console.log(isCommentLiked)        
+      //console.log(isCommentLiked)        
       const commentLikeBtn = document.querySelector(`#comment-like-${commentId}`)
       const commentLikeCnt = document.querySelector(`#comment-like-${commentId} > div`)
       const commentLikeTxt = document.querySelector(`#comment-like-${commentId} > span`)
       const commentLikeIcon = document.querySelector(`#comment-like-${commentId} > i`)
-      console.log(commentLikeBtn)
+      //console.log(commentLikeBtn)
+     // const curLikes = document.querySelector(`#comment-like- > div`)
+      //console.log(curLikes)
       if (isCommentLiked === true) {
         //commentLikeBtn.value = '좋아요 취소'
         console.log(commentLikeCnt.textContent)
         commentLikeTxt.textContent = '좋아요 취소'
-        commentLikeCnt.textContent={{comment.like_users.all|length}}
+        //commentLikeCnt.textContent={{comment.like_users.all|length}}
+        //const cnt = {{comment.like_users.all|length}}
+        //console.log(cnt)
         commentLikeIcon.classList.add('ri-heart-fill')
         commentLikeIcon.classList.remove('ri-heart-line')
       
@@ -285,7 +288,9 @@ commentLikeForms.forEach((form) => {
         //commentLikeBtn.value = '좋아요'
         console.log(commentLikeCnt.textContent)
         commentLikeTxt.textContent = '좋아요'
-        commentLikeCnt.textContent={{comment.like_users.all|length}}
+       // commentLikeCnt.textContent={{comment.like_users.all|length}}
+        //const cnt = {{comment.like_users.all|length}}
+        //console.log(cnt)
         commentLikeIcon.classList.add('ri-heart-line')
         commentLikeIcon.classList.remove('ri-heart-fill')
       }
@@ -317,6 +322,5 @@ window.addEventListener("scroll", () =>{
 
 });
 </script>
+
 {% endblock content %}
-
-
