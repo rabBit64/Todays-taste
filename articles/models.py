@@ -15,6 +15,7 @@ class Product(models.Model):
     scrap = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='scrapped_product',null=True)
     like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_product',null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    basket = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='basket_product',null=True)
 
 class Article(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -36,7 +37,7 @@ class Article(models.Model):
     # 상품 지정
     review_product = models.OneToOneField(Product, on_delete=models.DO_NOTHING, null=True)
     # 별점 추가
-    star_ranking = models.IntegerField(default=0)
+    # star_ranking = models.IntegerField(default=0)
     # 시간 설정
     def time_since_created(self):
         time_difference = timezone.now() - self.created_at

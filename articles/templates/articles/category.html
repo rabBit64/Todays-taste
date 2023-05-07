@@ -2,6 +2,7 @@
 
 {% block content %}
 {% load static %}
+{% load humanize %}
 
 <div class='container mt-3' style='width: 100%;'>
   {% comment %} 상단 Carousel {% endcomment %}
@@ -66,7 +67,7 @@
               <a href="{% url 'articles:product_detail' product.pk %}">
                   <img src="{{ product.main_image.url }}" style='border-radius: 8px;' alt="">
                   <p style='font-weight: bold;'>{{ product.product_name }}</p>
-                  <p>{{ product.price }}원</p>
+                  <p>{{ product.price | intcomma }}원</p>
               </a>
           </div>
           {% endfor %}

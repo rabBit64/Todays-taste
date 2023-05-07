@@ -23,6 +23,7 @@
 <h1>Main - {{ user }}</a></h1>
 {% endif %} {% endcomment %}
 {% load static %}
+{% load humanize %}
 
 
 
@@ -80,7 +81,7 @@
             <!-- 만약 유저가 올린 사진이 있다면 -->
             {% if article.image %}
             <div class='card-image'>
-              <div>
+              {% comment %} <div>
                 <form action="{% url 'articles:scrap' article.pk %}" metgod='POST'>
                   {% csrf_token %} 
                   <!-- 스크랩 한 후 -->
@@ -91,7 +92,7 @@
                   <button type='submit' class="fa-regular fa-bookmark fa-2x z-3 position-absolute a_scrap a_scrap_b"></button>
                   {% endif %}
                 </form>
-              </div>
+              </div> {% endcomment %}
 
               <img src="{{ article.image.url }}" class="card-img-top" style='width: 100%; height: 220px; border-radius: 8px;' alt="...">
 
@@ -100,7 +101,7 @@
             <!-- 만약 유저가 올린 사진이 없다면 -->
             {% else %}
             <div class="card-image">
-              <form action="{% url 'articles:scrap' article.pk %}" metgod='POST'>
+              {% comment %} <form action="{% url 'articles:scrap' article.pk %}" metgod='POST'>
                 {% csrf_token %}
                 <!-- 스크랩 -->
                 {% if request.user in article.scrap.all %}
@@ -109,7 +110,7 @@
                 {% else %}
                 <button type='submit' class="fa-regular fa-bookmark fa-2x z-3 position-absolute a_scrap a_scrap_b"></button>
                 {% endif %}
-              </form>
+              </form> {% endcomment %}
               
               <!-- 카드 사진 부분 -->
               <div class="no-img-bg d-flex justify-content-center align-items-center" style="width: 100%; height: 100%; border-radius: 8px;">
@@ -135,39 +136,6 @@
         </div>
         {% endfor %}
 
-          {% comment %}
-          <!-- 이 방법이 당연히 아니었다 ㅋㅎ -->
-
-          {% for result in search_result %}
-
-            <!-- 상품 사진 o, 리뷰 사진 o -->
-            {% if result.main_image %}
-              {% if result.image %}
-              <img src="{{ result.main_image.url }}" alt="...">
-              <img src="{{ result.image.url }}" alt="...">
-
-              <!-- 상품 사진 o, 리뷰 사진 x -->
-              {% elif result.image is null %}
-              <img src="{{ result.main_image.url }}" alt="...">
-              <p>{{ result.title }}</p>  
-
-              <!-- 상품 사진 o, 리뷰 사진 x ????? -->
-              {% else %}
-              <p>{{ result.title }}</p>
-              <img src="{{ result.main_image.url }}" alt="...">
-              {% endif %}
-
-            {% else %}
-            <!-- 상품 사진 x, 리뷰 사진 o -->
-              {% if result.image %}
-              <img src="{{ result.image.url }}" alt="...">
-              <!-- 상품 사진 x, 리뷰 사진 x -->
-              {% else %}
-              <p>{{ result.title }}</p>
-              {% endif %}
-            {% endif %}
-          {% endfor %} {% endcomment %}
-
       </div>
     </div>
 
@@ -177,7 +145,7 @@
 
         {% for result in search_result %}
         <!-- 상품 사진 o -->
-        {% if result %}
+          {% if result %}
             {% if result.main_image %}
               <div class='m-3 d-flex justify-content-center' style='width: 300px;'>
 
@@ -185,7 +153,7 @@
                 <a href="{% url 'articles:product_detail' result.pk %}">
                   <img src="{{ result.main_image.url }}" style='border-radius: 8px;' alt="">
                   <p style='font-weight: bold;'>{{ result.product_name }}</p>
-                  <p>{{ result.price }} 원</p>
+                  <p>{{ result.price | intcomma }} 원</p>
                 </a>
               </div>
             
@@ -195,7 +163,7 @@
               <div class="card p-0 m-3" style="width: 286px; height: 330px; border-radius: 8px;">
                 <a href="{% url 'articles:detail' result.pk %}" style='text-decoration:none;'>
                   <div class="card-img-top">
-                    <img src="{{ result.image.url }}" style="width: 100%; height: 190px; border-radius: 8px;" alt="...">
+                    <img src="{{ result.image.url }}" style="width: 100%; height: 220px; border-radius: 8px;" alt="...">
                   </div>
 
                   <div class="card-body" >
@@ -214,7 +182,7 @@
               <div class="card p-0 m-3 d-flex" style="width: 286px; height: 330px; border-radius: 8px;">
                 <a href="{% url 'articles:detail' result.pk %}" style='text-decoration:none;'>
 
-                  <div class="card-img-top d-flex justify-content-center align-items-center" style="width: 284px; height: 190px; border-radius: 8px; background-color: #FFF8D6;">
+                  <div class="card-img-top d-flex justify-content-center align-items-center" style="width: 284px; height: 220px; border-radius: 8px; background-color: #FFF8D6;">
                     <div style='font-size: 20px; font-weight: bold; color: #495c40;'>{{ result.title }}</div>
                   </div>
 

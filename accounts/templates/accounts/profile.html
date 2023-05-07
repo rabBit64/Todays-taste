@@ -42,9 +42,8 @@
   </div>
   <div>
       <div>
-        <div class='d-flex justify-content-between'style='border-bottom:1px solid #F2F2F2;'>
-          <div>
-          </div>
+        <div class='d-flex justify-content-center'style='border-bottom:1px solid #F2F2F2;'>
+          
           <div class='text-center'>
             <img style="width:86px; height: 86px; border-radius: 50%;" src="https://image.ohou.se/image/central_crop/bucketplace-v2-development/uploads-default_images-avatar.png/160/160"alt="">
             <div class='profile-main-username text-center'>
@@ -96,7 +95,7 @@
               <div>
                 <ul class="profile-tab p-0" id="pills-tab" role="tablist">
                   <li role="presentation">
-                    <button class="profile-tab-button active" id="button-follower-tab" data-bs-toggle="pill" data-bs-target="#button-follower" type="button" role="tab" aria-controls="button-follower" aria-selected="true">스크랩 상품 {{person.scrapped_articles.all|length}}</button>
+                    <button class="profile-tab-button active" id="button-follower-tab" data-bs-toggle="pill" data-bs-target="#button-follower" type="button" role="tab" aria-controls="button-follower" aria-selected="true">스크랩 상품 {{person.scrapped_product.all|length}}</button>
                   </li>
                   <li style='line-height:59px; color:#F2F2F2;'><b>|</b></li>
                   <li role="presentation">
@@ -108,11 +107,7 @@
               </div>
             </div>
           </div>
-        <div class='mt-4'>
-          <div class='text-center'><i class="bi bi-suit-heart"></i></div>
-          <p style='margin-right:5px;'>좋아요</p>
-          <div class='text-center'>{{article.like_users.all|length}}</div>
-        </div>
+        
       </div>
     </div>
     <div>
@@ -121,58 +116,14 @@
 
   <div class="tab-content" id="pills-tabContent">
     <div class="tab-pane fade show active" id="button-follower" role="taprofileanel" aria-labelledby="button-follower-tab" tabindex="0">
-        <h5 class="profile-tab-title"><b>스크랩 상품</b></h5>
+        <h5 class="profile-tab-title mt-3"><b>스크랩 상품</b></h5>
         <div class='container'>
           <div class='row justify-content-center'>
-            {% for article in person.scrapped_articles.all %}
-            <div class="card m-3 p-0" style="width: 18rem; border: 0px; ">
-              <a href="{% url 'articles:detail' article.pk %}" style='text-decoration:none;'>   
-    
-                <!-- 만약 유저가 올린 사진이 있다면 -->
-                {% if article.image %}
-                <div class='card-image' style='border-radius: 5px;'>
-                  <div>
-                    <form action="{% url 'articles:scrap' article.pk %}" metgod='POST'>
-                      {% csrf_token %} 
-                      <!-- 스크랩 한 후 -->
-                      {% if request.user in article.scrap.all %}
-                      <button type='submit' class="fa-solid fa-bookmark fa-2x z-3 position-absolute a_scrap a_scrap_a"></button>
-                      <!-- 스크랩 하기 전 -->
-                      {% else %}
-                      <button type='submit' class="fa-regular fa-bookmark fa-2x z-3 position-absolute a_scrap a_scrap_b"></button>
-                      {% endif %}
-                    </form>
-                  </div>
-    
-                  <img src="{{ article.image.url }}" class="card-img-top" alt="...">
-    
-                </div>
-    
-                <!-- 만약 유저가 올린 사진이 없다면 -->
-                {% else %}
-                <div class="card-image">
-                  <form action="{% url 'articles:scrap' article.pk %}" metgod='POST'>
-                    {% csrf_token %}
-                    <!-- 스크랩 -->
-                    {% if request.user in article.scrap.all %}
-                    <button type='submit' class="fa-solid fa-bookmark fa-2x z-3 position-absolute a_scrap a_scrap_a"></button>
-    
-                    {% else %}
-                    <button type='submit' class="fa-regular fa-bookmark fa-2x z-3 position-absolute a_scrap a_scrap_b"></button>
-                    {% endif %}
-                  </form>
-                  
-                  <!-- 카드 사진 부분 -->
-                  <div class="no-img-bg d-flex justify-content-center align-items-center" style="width: 100%; height: 100%; border-radius: 5px;">
-                    <div class='m-4 no-img-text text-center'>{{ article.title }}</div>
-                  </div>
-                </div>
-                <!-- <img src="{% static 'No_img.webp' %}" class="card-img-top" alt="..."> -->
-                {% endif %}
-                
-                
-    
-                {% comment %} 카드 바디 {% endcomment %}
+
+            {% for product in person.scrapped_product.all %}
+            <div class="card m-3 p-0" style="width: 18rem; border: 0px;">
+              <a href="{% url 'articles:product_detail' product.pk %}" style='text-decoration:none;'>   
+                <img src="{{ product.main_image.url }}" style='border-radius: 8px;' alt="">
               </a>
             </div>
             
@@ -186,16 +137,16 @@
   {% comment %} 리뷰 상품 {% endcomment %}
   <div class="tab-content" id="pills-tabContent">
     <div class="tab-pane fade " id="button-ollowing" role="tabpanel" aria-labelledby="button-ollowing-tab" tabindex="0">
-        <h5 class="profile-tab-title"><b>리뷰 상품</b></h5>
+        <h5 class="profile-tab-title mt-3 mb-4"><b>리뷰 상품</b></h5>
         <div class='container '>
-          <div class='row justify-content-center'>
+          <div class='row justify-content-center gap-3'>
             {% for article in articles %}
             {% if article.user == request.user %}
-            <div class="card" style="width: 18rem; border: 0px; ">
+            <div class="card" style="width: 18rem; padding: 0; border:0;">
               <a href="{% url 'articles:detail' article.pk %}" style='text-decoration:none;'>   
                 <!-- 만약 유저가 올린 사진이 있다면 -->
                 {% if article.image %}
-                <div class='card-image' style='border-radius: 5px;'>
+                <div class='card-image' style='width: 288px; height: 220px; border-radius: 5px;'>
                   <img src="{{ article.image.url }}" class="card-img-top" alt="...">
                 </div>
     
@@ -203,7 +154,7 @@
                 {% else %}
                 <div class="card-image">                 
                   <!-- 카드 사진 부분 -->
-                  <div class="no-img-bg d-flex justify-content-center align-items-center" style="width: 100%; height: 100%; border-radius: 5px;">
+                  <div class="no-img-bg d-flex justify-content-center align-items-center" style="width: 288px; height: 220px; border-radius: 5px;">
                     <div class='m-4 no-img-text text-center'>{{ article.title }}</div>
                   </div>
                 </div>
@@ -237,6 +188,7 @@
         </div> {% endcomment %}
     </div>
   </div>
+</div>
 {% comment %} <ul class="nav nav-underline">
   <li class="nav-item">
     <a class="nav-link active" aria-current="page" href="#"><span>팔로워 {{person.followers.all|length}}</span></a>

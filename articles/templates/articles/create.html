@@ -109,7 +109,7 @@ ul, p{
 .container2{
   margin-top:30px;
   {% comment %} text-align:center; {% endcomment %}
-  padding-left:300px;
+  {% comment %} padding-left:300px; {% endcomment %}
 }
 </style>
 <body>
@@ -130,51 +130,55 @@ ul, p{
         </div> {% endcomment %}
        
 
-    <div class="container2">
-      <form action="{% url 'articles:create' %}" method ='POST' enctype="multipart/form-data" class="article-create-form">
-        {% csrf_token %}
-        <!--리뷰작성-->
-        <div class='justify-content-center'>
-          {% comment %} {{form.as_p}} {% endcomment %}
-          제목
-          <div class='mb-3 review-title'>{{form.title}}</div>
-          <div>{{ form.image }}</div>
-          <div class='mb-3'>{{form.content}}</div>
-           {% comment %} <!--별점평가-->
-           <div class="start-rating">
-            <p>별점평가</p>
-            <div class="star-rates">
-              {% csrf_token %}
-              <button type="submit" class="fa fa-star star-btn" id="first"></button>
-              <button type="button" class="fa fa-star star-btn" id="second"></button>
-              <button type="button" class="fa fa-star star-btn" id="third"></button>
-              <button type="button" class="fa fa-star star-btn" id="fourth"></button>
-              <button type="button" class="fa fa-star star-btn" id="fifth"></button>
+    <div class="container2 d-flex  justify-content-center">
+      <div class='row'>
+        <form action="{% url 'articles:create' %}" method ='POST' enctype="multipart/form-data" class=" article-create-form">
+          {% csrf_token %}
+          <!--리뷰작성-->
+          <div class='justify-content-center'>
+            {% comment %} {{form.as_p}} {% endcomment %}
+            제목
+            <div class='mb-3 review-title'>{{form.title}}</div>
+            <div>{{ form.image }}</div>
+            <div class='mb-3'>{{form.content}}</div>
+            {% comment %} <!--별점평가-->
+            <div class="start-rating">
+              <p>별점평가</p>
+              <div class="star-rates">
+                {% csrf_token %}
+                <button type="submit" class="fa fa-star star-btn" id="first"></button>
+                <button type="button" class="fa fa-star star-btn" id="second"></button>
+                <button type="button" class="fa fa-star star-btn" id="third"></button>
+                <button type="button" class="fa fa-star star-btn" id="fourth"></button>
+                <button type="button" class="fa fa-star star-btn" id="fifth"></button>
+              </div>
+              <div id="rank-form">{{ form.star_ranking }}</div> 
             </div>
-            <div id="rank-form">{{ form.star_ranking }}</div> {% endcomment %}
+            {% endcomment %}
+            <button type="submit" class="btn review-button mt-3"><b>리뷰쓰기</b></button>
           </div>
-          <button type="submit" class="btn review-button mt-3"><b>리뷰쓰기</b></button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
-</body>
-<script>
-  //1.버튼 요소 선택
-  const one = document.getElementById('first');
-  const two = document.getElementById('second');
-  const three = document.getElementById('third');
-  const four = document.getElementById('fourth');
-  const five = document.getElementById('fifth');
 
-  const createForms = document.querySelectorAll('article-create-form')
-  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
-  // 별을 클릭하면 form에 값 저장
-  function saveValue(){
-    const rateForm = document.getElementById('#rank-forms')
-    console.log(rateForm)
-  }
-</script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+
+  {% comment %} <script>
+    //1.버튼 요소 선택
+    const one = document.getElementById('first');
+    const two = document.getElementById('second');
+    const three = document.getElementById('third');
+    const four = document.getElementById('fourth');
+    const five = document.getElementById('fifth');
+
+    const createForms = document.querySelectorAll('article-create-form')
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+    // 별을 클릭하면 form에 값 저장
+    function saveValue(){
+      const rateForm = document.getElementById('#rank-forms')
+      console.log(rateForm)
+    }
+  </script> {% endcomment %}
+</body>
 </html>

@@ -17,7 +17,8 @@ class ArticleForm(forms.ModelForm):
     # )
     class Meta:
         model = Article
-        fields = ('title','image','content','star_ranking')
+        fields = ('title','image','content',)
+        # fields = ('title','image','content','star_ranking')
 
     # title = forms.CharField(
     #     label='제목',

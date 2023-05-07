@@ -6,6 +6,8 @@ from django.db.models import Q
 from accounts.models import User
 from django.core.paginator import Paginator
 from django.http import JsonResponse
+#팔로우 추가
+from django.contrib.auth import get_user_model
 
 # Create your views here.
 
@@ -86,15 +88,6 @@ def create(request):
             article.save()
             return redirect('articles:detail', article.pk)
     else:
-    #     user = request.user
-    #     title = request.POST.get('title')
-    #     content = request.POST.get('content')
-    #     image = request.POST.get('image')
-    #     article_model = Article(user=user,title=title,content=content,image=image)
-    #     article_model.save()
-
-
-
         form = ArticleForm()
     context = {
         'form' : form,
@@ -104,8 +97,7 @@ def create(request):
 
 
 
-#팔로우 추가
-from django.contrib.auth import get_user_model
+
 
 def detail(request,article_pk):
     article = Article.objects.get(pk = article_pk)
@@ -267,14 +259,28 @@ def likes(request, article_pk):
 
 
 @login_required
-def scrap(request, article_pk):
-    article = Article.objects.get(pk=article_pk)
+def scrap(request, product_pk):
+    product = Product.objects.get(pk=product_pk)
 
-    if article.scrap.filter(pk=request.user.pk).exists():
-        article.scrap.remove(request.user)
+    if product.scrap.filter(pk=request.user.pk).exists():
+        product.scrap.remove(request.user)
     else:
-        article.scrap.add(request.user)
-    return redirect('articles:detail', article_pk)
+        product.scrap.add(request.user)
+    return redirect('articles:product_detail', product_pk)
+
+
+
+
+@login_required
+def basket(request, product_pk):
+    product = Product.objects.get(pk=product_pk)
+
+    if product.basket.filter(pk=request.user.pk).exists():
+        product.basket.remove(request.user)
+    else:
+        product.basket.add(request.user)
+    return redirect('articles:product_detail', product_pk)
+
 
 
 
