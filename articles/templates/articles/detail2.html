@@ -7,6 +7,7 @@
 {% load static %}
 
 <div class="content-detail-section">
+  <!--헤더-->
   <div class="content-detail-header">
     <h1 class="content-detail-title">{{ article.title }}</h1>
     <div class="content-header-bottom">
@@ -16,17 +17,18 @@
       </div>
 
       {% if request.user != article.user %}
-        <form action="{% url 'accounts:follow' article.user.pk %}" method='POST'>
+        {% comment %} <form action="{% url 'accounts:follow' article.user.pk %}" method='POST'> {% endcomment %}
+        <form id="follow-form" data-user-id="{{ article.user.pk }}">
           {% csrf_token %}
             {% if request.user in article.user.followers.all %}
               <button class="follow-button" type='submit'>
                 <span><i class="ri-add-line"></i></span> 
-                <span style="margin-right:5px;">언팔로우</span>
+                <span style="margin-right:5px;" id="follow-value">언팔로우</span>
               </button>
             {% else %}
               <button class="follow-button" type='submit'>
                 <span><i class="ri-add-line"></i></span>
-                <span style="margin-right:5px;">팔로우</span>
+                <span style="margin-right:5px;" id="follow-value">팔로우</span>
               </button> 
             {% endif %}
         </form>
@@ -48,6 +50,7 @@
         </div>
       {% endif %}
     </div>
+    <!--본문-->
   </div>
   <div>
     {% if article.image %}
@@ -57,12 +60,13 @@
     {% endif %}
   </div>
   <div>{{ article.content }}</div>
+  <!--좋아요수, 스크랩수, 댓글수, 조회수-->
   <div class="content-detail-stat">
     <p class="content-detail-stat-item">좋아요 {{article.like_users.all|length}} </p>
-    <p class="content-detail-stat-item">스크랩 {{article.scrap.all|length}}</p>
     <p class="content-detail-stat-item">댓글 {{comments|length}}</p>
     <p class="content-detail-stat-item">조회 {{article.view_count}} </p>
   </div>
+  <!--댓글-->
   <div class="comment-section">
     <div style="margin-top:3px;">
       <p>댓글
@@ -70,50 +74,63 @@
       </p>
     </div>
     
-    <form class="comment-box" action="{% url 'articles:create_comment' article.pk %}" method='POST'>
+   <!-- 댓글 수정 후 -->
+   <form class="comment-box" action="{% url 'articles:create_comment' article.pk %}" method='POST'>
       {% csrf_token %}
       {{ comment_form }}
       <input type="submit" value='댓글 작성'>
     </form>
     <div>
-      {% for comment in comments %}
-      <b><div>{{ comment.user }}</div></b>
-      <div>{{ comment.content }}</div>
-      <div class='d-flex justify-content-between'>
-        <div>
-          <div class="comment-time">{{ comment.time_since_created }} 전</div>
+      {% for comment in comment_all %}
+        <b><div>{{ comment.user.nickname }}</div></b>
+        <div>{{ comment.content }}</div>
+        <div class='d-flex' style="text-align:center;">
+          <div class="comment-time" style="margin:0;">{{ comment.time_since_created }} 전</div>
+          <!--댓글좋아요 / 댓글 ajax 추가-->
           <form action="{% url 'articles:comment_like' article.pk comment.pk %}" data-comment-id="{{ comment.pk }}" data-article-id="{{article.pk}}" class="comment-like-forms" method="POST">
             {% csrf_token %}
-              {% if  request.user in comment_all.pk.like_users.all %}
-                <button type="submit" class="unlike-comment" id="comment-like-{{ comment.pk }}">
+              {% if request.user in comment.like_users.all %}
+                {% comment %} <i class="ri-heart-line"></i>
+                <input type="submit" value="좋아요취소" id="comment-like-{{ comment.pk }}"> {% endcomment %}
+                <button type="submit" class="like-comment" id="comment-like-{{ comment.pk }}">
                   <i class="ri-heart-fill"></i>
-                  <span class="like-text">안좋아요</span>
-                   <div style="margin-left:3px">{{comment.like_users.all|length}}</div>
+                  <span class="like-text">좋아요취소</span>
+                  <!--수정필요-->
+                  <div style="margin-left:3px">{{comment.like_users.all|length}}</div>
                 </button>
               {% else %}
+                {% comment %} <input type="submit" value="좋아요" id="comment-like-{{ comment.pk }}">  {% endcomment %}
                 <button type="submit" class="like-comment" id="comment-like-{{ comment.pk }}">
                   <i class="ri-heart-line"></i>
                   <span class="like-text">좋아요</span>
+                  <!--수정필요-->
                   <div style="margin-left:3px">{{comment.like_users.all|length}}</div>
                 </button>
               {% endif %}
           </form>
+          <div style="padding-bottom:2px;">
+            <form action="{% url 'articles:comment_delete' article.pk comment.pk %}">
+              <input style='font-size:12px;' type="submit" value='삭제'>
+            </form>
+          </div>
+          
         </div>
-      <div>
-        <form action="{% url 'articles:comment_delete' article.pk comment.pk %}">
-          <input style='font-size:12px;' type="submit" value='삭제'>
-        </form>
-      </div>
+    <div>
+      
     </div>
-  </div>  
-  <hr>
-  {% endfor %}
+    <hr>
+    {% endfor %}
+    
+  </div>
+</div>  
+
     
   
   <div class="content-sidebar" id="sidebar">
     <form action="{% url 'articles:likes' article.pk %}" method="POST" class="mb-4">
       {% csrf_token %}
       {% if request.user in article.like_users.all %}
+        {% comment %} <input class="like-button" type="submit" value="좋아요 취소"> {% endcomment %}
          <button class="like-button m-0" title="좋아요 취소" type="submit">
           <i class="ri-heart-fill heart-fill heart-icon"></i>
         </button> 
@@ -124,10 +141,12 @@
           <i class="ri-heart-line heart-icon"></i>
         </button> 
         <p class="ms-4">{{article.like_users.all|length}} </p>
+        
+        
       {% endif %}
     </form>
 
-    <form action="{% url 'articles:scrap' article.pk %}" method="POST">
+    {% comment %} <form action="{% url 'articles:scrap' article.pk %}" method="POST">
       {% csrf_token %}
       {% if request.user in article.scrap.all %}
       <button class="like-button m-0" title="스크랩 취소" type="submit">
@@ -140,7 +159,7 @@
       </button>
       <p class="ms-4">{{article.scrap.all|length}} </p>  
       {% endif %}
-    </form>
+    </form> {% endcomment %}
   </div>
 </div>
 </div>
@@ -203,50 +222,107 @@
 
 
 
+<!-- {% block timer %}
+<div class="sec7-text-box">
+  <p>오픈날짜</p>
+  <p class="runTimeCon">2023년 04월 29일 AM 00시</p>
+  <hr/>
+  <p class="time-title">오픈까지 남은 시간</p>
+  <div class="time">
+    <span id="d-day-hour"></span>
+    <span class="col">:</span>
+    <span id="d-day-min"></span>
+    <span class="col">:</span>
+    <span id="d-day-sec"></span>
+  </div>
+</div>
+{% endblock timer %} -->
 
 <br>
 
 
 
 <hr>
+
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
+console.log("스크립트 동작")
 function openButton(){
   document.getElementById("mydropdown").classList.toggle("show");
-  console.log(document.getElementById("mydropdown"))
+  //console.log(document.getElementById("mydropdown"))
 }
+//팔로우 비동기 요청
+const followForm = document.querySelector('#follow-form')
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+if(followForm != null && followForm !==''){
+  followForm.addEventListener('submit', function(event) {
+    event.preventDefault()
+    const articleId = event.target.dataset.userId
+    axios({
+      method: 'post',
+      url: `/accounts/${articleId}/follow/`,
+      headers: {'X-CSRFToken': csrftoken},
+    })
+    .then((response) => {
+      // console.log(response.data)
+      const isFollowed = response.data.is_followed
+      const followBtn = document.querySelector('#follow-value')
+      console.log(followBtn)
+      // isFollowed에 따라 버튼을 조작
+      if (isFollowed === true) {
+        followBtn.textContent = '언팔로우'
+      } else {
+        followBtn.textContent = '팔로우'
+      }
+    })
+  })
+}
+
+
+
+
 //댓글 좋아요 비동기 요청
 const commentLikeForms = document.querySelectorAll('.comment-like-forms')
-console.log(commentLikeForms)
-const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+//console.log(commentLikeForms)
+//console.log(document.getElementById("comment-cnt"))
+//const likeCnts = Number(document.getElementById("comment-cnt").textContent) //좋아요상태
+//const likeCnts2 = Number(document.getElementById("comment-cnt2").textContent)  //안좋아요
+//const likeCntTxt = document.getElementById("comment-cnt") //좋아요상태
+//const likeCntTxt2 = document.getElementById("comment-cnt2") //안좋아요
+//const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
 commentLikeForms.forEach((form) => {
   form.addEventListener('submit', function(event) {
     //이벤트 기본동작 취소
     event.preventDefault()
-    console.log("로그를 찍어보자")
-    console.log(event.target)
-    console.log(event.target.dataset)
-    console.log(event.target.dataset.commentId)
-    console.log(event.target.dataset.articleId)
+   // console.log("로그를 찍어보자")
+    //console.log(event.target)
+    //console.log(event.target.dataset)
+    //console.log(event.target.dataset.commentId)
+    //console.log(event.target.dataset.articleId)
     const commentId = event.target.dataset.commentId
     const articleId = event.target.dataset.articleId
+    
     axios({
       method: 'post',
-      url: `http://127.0.0.1:8000/articles/${articleId}/comments/${commentId}/comment_like/`,
+      url: `/articles/${articleId}/comments/${commentId}/comment_like/`,
       headers: {'X-CSRFToken': csrftoken},
     }).then((response) => {        
       const isCommentLiked = response.data.is_comment_liked
-      console.log(isCommentLiked)        
+      //console.log(isCommentLiked)        
       const commentLikeBtn = document.querySelector(`#comment-like-${commentId}`)
-      const commentLikeCnt = document.querySelector(`#comment-like-${commentId} > div`)
+      const commentLikeCnt = Number(document.querySelector(`#comment-like-${commentId} > div`).textContent)
+      console.log("??",commentLikeCnt)
       const commentLikeTxt = document.querySelector(`#comment-like-${commentId} > span`)
+      console.log("젭알",commentLikeTxt)
       const commentLikeIcon = document.querySelector(`#comment-like-${commentId} > i`)
-      console.log(commentLikeBtn)
+      //console.log(commentLikeBtn)
+      const curLikes = document.querySelector(`#comment-like-${commentId} > div`)
+      console.log("젭알22",curLikes)
       if (isCommentLiked === true) {
         //commentLikeBtn.value = '좋아요 취소'
         console.log(commentLikeCnt.textContent)
         commentLikeTxt.textContent = '좋아요 취소'
-        commentLikeCnt.textContent={{comment.like_users.all|length}}
+        curLikes.textContent = commentLikeCnt+1
         commentLikeIcon.classList.add('ri-heart-fill')
         commentLikeIcon.classList.remove('ri-heart-line')
       
@@ -254,7 +330,7 @@ commentLikeForms.forEach((form) => {
         //commentLikeBtn.value = '좋아요'
         console.log(commentLikeCnt.textContent)
         commentLikeTxt.textContent = '좋아요'
-        commentLikeCnt.textContent={{comment.like_users.all|length}}
+        curLikes.textContent = commentLikeCnt-1
         commentLikeIcon.classList.add('ri-heart-line')
         commentLikeIcon.classList.remove('ri-heart-fill')
       }
@@ -286,6 +362,5 @@ window.addEventListener("scroll", () =>{
 
 });
 </script>
+
 {% endblock content %}
-
-
