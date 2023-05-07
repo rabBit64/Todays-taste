@@ -89,7 +89,7 @@
       
       {% comment %} 댓글 수정 (닉네임 출력x) {% endcomment %}
       {% for comment in comment_all %}
-      <b><div>{{ comment.user }}</div></b>
+      <b><div>{{ comment.user.nickname }}</div></b>
       <div>{{ comment.content }}</div>
       <div class='d-flex justify-content-between'>
         <div>
