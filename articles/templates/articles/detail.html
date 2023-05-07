@@ -249,34 +249,37 @@ function openButton(){
 //팔로우 비동기 요청
 const followForm = document.querySelector('#follow-form')
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
-followForm.addEventListener('submit', function(event) {
-  event.preventDefault()
-  const articleId = event.target.dataset.userId
-  axios({
-    method: 'post',
-    url: `/accounts/${articleId}/follow/`,
-    headers: {'X-CSRFToken': csrftoken},
+if(followForm != null && followForm !==''){
+  followForm.addEventListener('submit', function(event) {
+    event.preventDefault()
+    const articleId = event.target.dataset.userId
+    axios({
+      method: 'post',
+      url: `/accounts/${articleId}/follow/`,
+      headers: {'X-CSRFToken': csrftoken},
+    })
+    .then((response) => {
+      // console.log(response.data)
+      const isFollowed = response.data.is_followed
+      const followBtn = document.querySelector('#follow-value')
+      console.log(followBtn)
+      // isFollowed에 따라 버튼을 조작
+      if (isFollowed === true) {
+        followBtn.textContent = '언팔로우'
+      } else {
+        followBtn.textContent = '팔로우'
+      }
+  
+    })
   })
-  .then((response) => {
-    // console.log(response.data)
-    const isFollowed = response.data.is_followed
-    const followBtn = document.querySelector('#follow-value')
-    console.log(followBtn)
-    // isFollowed에 따라 버튼을 조작
-    if (isFollowed === true) {
-      followBtn.textContent = '언팔로우'
-    } else {
-      followBtn.textContent = '팔로우'
-    }
+}
 
-  })
-})
 
 
 
 //댓글 좋아요 비동기 요청
 const commentLikeForms = document.querySelectorAll('.comment-like-forms')
-//console.log(commentLikeForms)
+console.log(commentLikeForms)
 //const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
 commentLikeForms.forEach((form) => {
   form.addEventListener('submit', function(event) {
