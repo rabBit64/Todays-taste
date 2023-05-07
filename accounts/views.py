@@ -51,17 +51,6 @@ def signup(request):
 
 
 
-@login_required
-def profile(request,pk):
-    User_detail = get_user_model().objects.get(pk=pk)
-    context = {
-        'User_detail':User_detail,
-    }
-    return render(request,'accounts/profile.html',context)
-
-
-
-
 
 @login_required
 def update(request):
@@ -99,14 +88,16 @@ def profile(request,username):
     for article in articles:
         if article.user == request.user:
             review_count += 1
-
+    print(person.username)
+    print(person.followings)
+    print(person.followers)
     context = {
-        'User_detail':person,
+        # 'User_detail':person,
         'review_count' : review_count,
         'articles' : articles,
         'person' : person,
     }
-    print(review_count)
+    # print(review_count)
     return render(request,'accounts/profile.html',context)
 
 
@@ -133,7 +124,7 @@ def follow(request, user_pk):
         }
 
         return JsonResponse(context)
-        # return redirect('articles:detail',user_pk)
+        #return redirect('articles:detail',article_pk)
     return redirect('articles:detail',user_pk,context)
 
         # main

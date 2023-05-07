@@ -60,7 +60,7 @@
                     </div>
                     <div class="modal-body">
                       {% for follow in person.followers.all %}
-                      <div>{{follow.nickname}}</div>
+                      <div>{{follow.username}}</div>
                       {% endfor %}
                     </div>
                   </div>
@@ -78,8 +78,8 @@
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                      {% for followings in person.followings.all %}
-                        <div>{{followings.nickname}}</div>
+                      {% for followings in person.pk.followings.all %}
+                        <div>{{followings.username}}</div>
                       {% endfor %}
                     </div>
                   </div>
