@@ -82,43 +82,48 @@
     </form>
     <div>
       {% for comment in comment_all %}
-      <b><div>{{ comment.user.nickname }}</div></b>
-      <div>{{ comment.content }}</div>
-      <div class='d-flex justify-content-between'>
-      <div>
-        <div class="comment-time">{{ comment.time_since_created }} 전</div>
-        <!--댓글좋아요 / 댓글 ajax 추가-->
-        <form action="{% url 'articles:comment_like' article.pk comment.pk %}" data-comment-id="{{ comment.pk }}" data-article-id="{{article.pk}}" class="comment-like-forms" method="POST">
-          {% csrf_token %}
-            {% if request.user in comment.like_users.all %}
-              {% comment %} <i class="ri-heart-line"></i>
-              <input type="submit" value="좋아요취소" id="comment-like-{{ comment.pk }}"> {% endcomment %}
-              <button type="submit" class="like-comment" id="comment-like-{{ comment.pk }}">
-                <i class="ri-heart-fill"></i>
-                <span class="like-text">좋아요취소</span>
-                 <!--수정필요-->
-                 <div style="margin-left:3px">{{comment.like_users.all|length}}</div>
-              </button>
-            {% else %}
-              {% comment %} <input type="submit" value="좋아요" id="comment-like-{{ comment.pk }}">  {% endcomment %}
-              <button type="submit" class="like-comment" id="comment-like-{{ comment.pk }}">
-                <i class="ri-heart-line"></i>
-                <span class="like-text">좋아요</span>
-                <!--수정필요-->
-                <div style="margin-left:3px">{{comment.like_users.all|length}}</div>
-              </button>
-            {% endif %}
-        </form>
+        <b><div>{{ comment.user.nickname }}</div></b>
+        <div>{{ comment.content }}</div>
+        <div class='d-flex' style="text-align:center;">
+          <div class="comment-time" style="margin:0;">{{ comment.time_since_created }} 전</div>
+          <!--댓글좋아요 / 댓글 ajax 추가-->
+          <form action="{% url 'articles:comment_like' article.pk comment.pk %}" data-comment-id="{{ comment.pk }}" data-article-id="{{article.pk}}" class="comment-like-forms" method="POST">
+            {% csrf_token %}
+              {% if request.user in comment.like_users.all %}
+                {% comment %} <i class="ri-heart-line"></i>
+                <input type="submit" value="좋아요취소" id="comment-like-{{ comment.pk }}"> {% endcomment %}
+                <button type="submit" class="like-comment" id="comment-like-{{ comment.pk }}">
+                  <i class="ri-heart-fill"></i>
+                  <span class="like-text">좋아요취소</span>
+                  <!--수정필요-->
+                  <div style="margin-left:3px" id="comment-cnt">{{comment.like_users.all|length}}</div>
+                </button>
+              {% else %}
+                {% comment %} <input type="submit" value="좋아요" id="comment-like-{{ comment.pk }}">  {% endcomment %}
+                <button type="submit" class="like-comment" id="comment-like-{{ comment.pk }}">
+                  <i class="ri-heart-line"></i>
+                  <span class="like-text">좋아요</span>
+                  <!--수정필요-->
+                  <div style="margin-left:3px" id="comment-cnt2">{{comment.like_users.all|length}}</div>
+                </button>
+              {% endif %}
+          </form>
+          <div style="padding-bottom:2px;">
+            <form action="{% url 'articles:comment_delete' article.pk comment.pk %}">
+              <input style='font-size:12px;' type="submit" value='삭제'>
+            </form>
+          </div>
+          
         </div>
-      <div>
-      <form action="{% url 'articles:comment_delete' article.pk comment.pk %}">
-        <input style='font-size:12px;' type="submit" value='삭제'>
-      </form>
+    <div>
+      
     </div>
+    <hr>
     {% endfor %}
+    
   </div>
 </div>  
-<hr>
+
     
   
   <div class="content-sidebar" id="sidebar">
@@ -269,7 +274,6 @@ if(followForm != null && followForm !==''){
       } else {
         followBtn.textContent = '팔로우'
       }
-  
     })
   })
 }
@@ -279,7 +283,11 @@ if(followForm != null && followForm !==''){
 
 //댓글 좋아요 비동기 요청
 const commentLikeForms = document.querySelectorAll('.comment-like-forms')
-console.log(commentLikeForms)
+//console.log(commentLikeForms)
+const likeCnts = document.getElementById('#comment-cnt')
+const likeCnts2 = document.getElementById('#comment-cnt2')
+console.log(likeCnts)
+console.log(likeCnts2)
 //const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
 commentLikeForms.forEach((form) => {
   form.addEventListener('submit', function(event) {
@@ -292,6 +300,7 @@ commentLikeForms.forEach((form) => {
     //console.log(event.target.dataset.articleId)
     const commentId = event.target.dataset.commentId
     const articleId = event.target.dataset.articleId
+    
     axios({
       method: 'post',
       url: `/articles/${articleId}/comments/${commentId}/comment_like/`,
@@ -311,7 +320,7 @@ commentLikeForms.forEach((form) => {
         console.log(commentLikeCnt.textContent)
         commentLikeTxt.textContent = '좋아요 취소'
         //commentLikeCnt.textContent={{comment.like_users.all|length}}
-        //const cnt = {{comment.like_users.all|length}}
+        const cnt = 
         //console.log(cnt)
         commentLikeIcon.classList.add('ri-heart-fill')
         commentLikeIcon.classList.remove('ri-heart-line')
