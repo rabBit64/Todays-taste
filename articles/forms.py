@@ -65,5 +65,3 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ('content',)
         label_suffix = ''
-
-

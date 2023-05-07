@@ -180,7 +180,7 @@ def product_detail(request, product_pk):
 def update(request,article_pk):
     article = Article.objects.get(pk=article_pk)
     if request.method == 'POST':
-        form = ArticleForm(request.POST, instance=article)
+        form = ArticleForm(request.POST, request.FILES, instance=article)
         if form.is_valid():
             form.save()
             return redirect('articles:detail',article.pk)
