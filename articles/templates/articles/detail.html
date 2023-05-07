@@ -62,7 +62,6 @@
   <!--좋아요수, 스크랩수, 댓글수, 조회수-->
   <div class="content-detail-stat">
     <p class="content-detail-stat-item">좋아요 {{article.like_users.all|length}} </p>
-    <p class="content-detail-stat-item">스크랩 {{article.scrap.all|length}}</p>
     <p class="content-detail-stat-item">댓글 {{comments|length}}</p>
     <p class="content-detail-stat-item">조회 {{article.view_count}} </p>
   </div>
@@ -80,6 +79,15 @@
       <input type="submit" value='댓글 작성'>
     </form>
     <div>
+
+      {% comment %} 댓글 수정 전 (닉네임 출력) {% endcomment %}
+      {% comment %}
+      {% for comment in comments %}
+      <b><div>{{ comment.user.nickname }}</div></b>
+      {% endfor %}
+      {% endcomment %}
+      
+      {% comment %} 댓글 수정 (닉네임 출력x) {% endcomment %}
       {% for comment in comment_all %}
       <b><div>{{ comment.user }}</div></b>
       <div>{{ comment.content }}</div>
