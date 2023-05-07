@@ -1,23 +1,144 @@
 {% extends 'base.html' %}
 
+{% block style %}
+
+{% endblock style %}
 
 {% block content %}
-<h3>제품 상세 페이지</h3>
-<br>
+{% load static %}
+{% load humanize %}
 
 
-<p>카테고리 : {{ product.category }}</p>
-<img src="{{ product.main_image.url }}" alt="">
-<p>제품 이름 : {{ product.product_name }}</p>
-<p>가격 : {{ product.price }} 원</p>
+<div class='container' style='min-width: 1020px;'>
+    <div class='row d-flex flex-column'>
+        {% comment %} 제품 사진 및 & 가격 {% endcomment %}
+        <div class='d-flex flex-row justify-content-around mt-3'>
+            {% comment %} <div class='d-flex flex-row'>
+                <div class='d-flex flex-column'>
+                    {% for p_img in product_img %}
+                    <img src="{{ p_img.photo.url }}" class='m-1' style='width: 150px; height: 150px; border: 1px solid #DFDFDF; border-radius: 5px;' alt="">
+                    {% endfor %}
+                </div>
+
+                <img src="{{ product.main_image.url }}" class='m-1' style='width: 400px; height: 400px; border-radius: 5px;' alt="">
+            </div> {% endcomment %}
+
+            <div class='d-flex flex-row'>
+                <div class='d-flex flex-column'>
+                    {% for p_img in product_img %}
+                        <div type="button" data-bs-toggle="modal" data-bs-target="#{{ p_img.photo.url }}">
+                            <img src="{{ p_img.photo.url }}" class='m-1' style='width: 150px; height: 150px; border: 1px solid #DFDFDF; border-radius: 5px;' alt="">
+                        </div>
+                    
+                        <!-- Modal -->
+                        <div class="modal fade" id="{{ p_img.photo.url }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class='mt-2'>제품 상세 이미지</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                
+                                <div class="modal-body">                
+                                    <img src="{{ p_img.photo.url }}" class='m-1' style='width: 100%; height:100%; border: 1px solid #DFDFDF; border-radius: 5px;' alt="">
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <img src="{{ product.main_image.url }}" class='m-1' style='width: 400px; height: 400px; border-radius: 5px;' alt="">
+            </div>
+            
 
 
-{% for p_img in product_img %}
-<img src="{{ p_img.photo.url }}" alt="">
-{% endfor %}
+            <div class='d-flex flex-column ms-3'>
+                <!-- 카테고리 누르면 해당 카테고리 상품 페이지로 이동 -->
+                <p class='mb-1'><a href="{% url 'articles:category' product.category %}" style='font-size: 15px; font-weight: bold; color: gray;'>{{ product.category }}</a></p>
+
+                <p style='font-size: 24px;'>{{ product.product_name }}</p>
+
+                <p class='mb-3' style='font-size: 24px;'><span style='font-size: 32px; font-weight: bold;'>{{ product.price | intcomma }}</span> 원</p>
+
+                <p class='mb-2' style='font-size: 15px; color: gray;'>혜택 <span class='ms-3' style='font-weight: bold;'>0.1% </span><span>적립</span></p>
+
+                <p class='mb-1' style='font-size: 15px; color: gray;'>배송 <span class='ms-3' style='font-weight: bold;'>무료배송</span></p>
+
+                <!-- 오늘 날짜 +1 출력 -->
+                <div class='d-flex flex-row ms-5 mb-1 '> 
+                    <p style='font-size: 15px;'>지금 주문시</p>
+                    <p id="current_date" class='ms-1 me-1' style='font-size: 15px; font-weight: bold; color: #495c40;'></p>
+                    <p style='font-size: 15px;'>도착 예정</p>
+
+                    <div class="dropdown">
+                        <div class="dropdown-toggle " type="button" data-bs-toggle="dropdown" aria-expanded="false">    
+                        </div>
+                        <ul class="dropdown-menu p-2" style='width: 300px;'>
+                            <li>
+                                <p style='font-size: 14px;'>도착예정일은 판매자가 설정한 날짜입니다.</p>
+                                <p style='font-size: 14px;'>판매자와 택배사 사정으로 예정일과 실제 도착일이 다를 수 있습니다.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <p class='ms-5 mb-1' style='font-size: 15px;'>일반 택배</p>
+
+                <p class='ms-5' style='font-size: 14px; color: gray;'>제주도/도서산간 지역 5,000원</p>
+
+                <span id="current_date" class='ms-5' style='font-size: 15px; color: gray;'></span>
+
+                <div class='d-flex justify-content-center mt-auto'>
+
+                    <form action="{% url 'articles:basket' product.pk %}" metgod='POST'>
+                        {% csrf_token %} 
+                        <!-- 장바구니 넣은 후 -->
+                        {% if request.user in product.basket.all %}
+                        <button type='submit' class="btn btn-primary me-2">장바구니에 담김</button>
+                        <!-- 장바구니 넣기 전 -->
+                        {% else %}
+                        <button type='submit' class="btn btn-primary me-2">장바구니에 넣기</button>
+                        {% endif %}
+                    </form>
+                    
+                    <form action="{% url 'articles:scrap' product.pk %}" metgod='POST'>
+                        {% csrf_token %} 
+                        <!-- 스크랩 한 후 -->
+                        {% if request.user in product.scrap.all %}
+                        <button type='submit' class="fa-solid fa-bookmark fa-2x z-3 position-absolute a_scrap a_scrap_a" style='border: 0; background: none; color: #ffce3d;'></button>
+                        <!-- 스크랩 하기 전 -->
+                        {% else %}
+                        <button type='submit' class="fa-regular fa-bookmark fa-2x z-3 position-absolute a_scrap a_scrap_b" style='border: 0; background: none; color: #ffce3d;'></button>
+                        {% endif %}
+                    </form>
+                </div>
+
+
+            </div>  
+        </div>
+
+        <hr class='ms-3 me-3 mt-5 mb-5'>
+
+        {% comment %} 제품 상세 정보 {% endcomment %}
+        <div>
+            <p class='m-2 mb-4' style='font-size: 28px; font-weight: bold; color: #495c40;'>제품 상세정보</p>
+            <p class='m-2'>{{ product.content }}</p>
+        </div>
+
+    </div>
+</div>
 
 
 
+<script>
+    date = new Date();
+    year = date.getFullYear();
+    month = date.getMonth() + 1;
+    day = date.getDate() + 1;
+    document.getElementById("current_date").innerHTML = month + "/" + day;
+</script>
 
 {% endblock content %}
 

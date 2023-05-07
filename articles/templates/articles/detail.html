@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
+
 {% block head %}
 {% load static %}
   <link rel="stylesheet" href="{% static 'detail/style.css' %}">
 {% endblock head %}
+
 {% block content %}
 {% load static %}
 
@@ -118,7 +120,9 @@
               <i class="ri-heart-line"></i>
               <a href="#"><span class="like-text">좋아요</span></a>
             </button>
-          </div> -->
+          </div>
+        </div>
+        {% endfor %} -->
 
 
     <!-- 댓글 수정 후 -->
@@ -129,7 +133,7 @@
     </form>
     <div>
       {% for comment in comments %}
-      <b><div>{{ comment.user }}</div></b>
+      <b><div>{{ comment.user.nickname }}</div></b>
       <div>{{ comment.content }}</div>
       <div class='d-flex justify-content-between'>
 
@@ -160,16 +164,17 @@
               
               
           </form>
-        </div>
-      <div>
+          </div>
+        <div>
         <form action="{% url 'articles:comment_delete' article.pk comment.pk %}">
           <input style='font-size:12px;' type="submit" value='삭제'>
         </form>
       </div>
+      {% endfor %}
     </div>
   </div>  
   <hr>
-  {% endfor %}
+  
     
   
 <!-- 좋아요 수정 -- >
@@ -222,6 +227,7 @@
           <i class="ri-heart-fill heart-fill heart-icon"></i>
         </button> 
         <p class="ms-4">{{article.like_users.all|length}} </p>
+        {% endif %}
          -- >
 
 
