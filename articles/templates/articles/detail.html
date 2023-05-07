@@ -90,10 +90,10 @@
         <!--댓글좋아요 / 댓글 ajax 추가-->
         <form action="{% url 'articles:comment_like' article.pk comment.pk %}" data-comment-id="{{ comment.pk }}" data-article-id="{{article.pk}}" class="comment-like-forms" method="POST">
           {% csrf_token %}
-            {% if request.user in comment.pk.like_users.all %}
+            {% if request.user in comment.like_users.all %}
               {% comment %} <i class="ri-heart-line"></i>
               <input type="submit" value="좋아요취소" id="comment-like-{{ comment.pk }}"> {% endcomment %}
-              <button type="submit" class="unlike-comment" id="comment-like-{{ comment.pk }}">
+              <button type="submit" class="like-comment" id="comment-like-{{ comment.pk }}">
                 <i class="ri-heart-fill"></i>
                 <span class="like-text">좋아요취소</span>
                  <!--수정필요-->
