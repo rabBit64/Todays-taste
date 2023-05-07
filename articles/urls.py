@@ -14,6 +14,7 @@ urlpatterns = [
     path('<int:article_pk>/comments/<int:comment_pk>/comment_like/', views.comment_like,name='comment_like'),
     path('<int:article_pk>/likes/', views.likes, name='likes'),
     path('search/', views.search, name='search'),
+    # path('<int:article_pk>/scrap/', views.scrap, name='scrap'),
     path('<int:product_pk>/scrap/', views.scrap, name='scrap'),
     path('<int:product_pk>/basket/', views.basket, name='basket'),
     path('product/', views.product, name='product'),

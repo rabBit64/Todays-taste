@@ -6,6 +6,11 @@ from django.db.models import Q
 from accounts.models import User
 from django.core.paginator import Paginator
 from django.http import JsonResponse
+#팔로우 추가
+from django.contrib.auth import get_user_model
+
+# Create your views here.
+
 
 
 
@@ -15,10 +20,8 @@ def init(request):
 
 
 
-# product pk 값을 받아와야 함
 def index(request):
     articles = Article.objects.order_by('-pk')
-    
     page = request.GET.get('page', '1')
     per_page = 9
     paginator = Paginator(articles, per_page)
@@ -84,18 +87,7 @@ def create(request):
             article.user = request.user
             article.save()
             return redirect('articles:detail', article.pk)
-        else:
-            print("not valid")
     else:
-    #     user = request.user
-    #     title = request.POST.get('title')
-    #     content = request.POST.get('content')
-    #     image = request.POST.get('image')
-    #     article_model = Article(user=user,title=title,content=content,image=image)
-    #     article_model.save()
-
-
-
         form = ArticleForm()
     context = {
         'form' : form,
@@ -105,8 +97,7 @@ def create(request):
 
 
 
-#팔로우 추가
-from django.contrib.auth import get_user_model
+
 
 def detail(request,article_pk):
     article = Article.objects.get(pk = article_pk)
@@ -231,9 +222,7 @@ def comment_delete(request, article_pk, comment_pk):
 
     
 def comment_like(request, article_pk,comment_pk):
-    article = Article.objects.get(pk=article_pk)
     comment = Comment.objects.get(pk=comment_pk)
-
     if comment.like_users.filter(pk=request.user.pk).exists():
         comment.like_users.remove(request.user)
         is_comment_liked=False
@@ -243,7 +232,7 @@ def comment_like(request, article_pk,comment_pk):
     context={
         'is_comment_liked': is_comment_liked,
     }
-    #return redirect('articles:detail',article_pk,context)
+    # return redirect('articles:detail',article_pk,context)
     return JsonResponse(context)
 
 @login_required
@@ -252,19 +241,22 @@ def likes(request, article_pk):
 
     if article.like_users.filter(pk=request.user.pk).exists():
         article.like_users.remove(request.user)
+        is_liked = False
     else:
         article.like_users.add(request.user)
-    return redirect('articles:detail', article_pk)
+        is_liked = True
+    context = {
+        'is_liked' : is_liked,
+        'liked_count' : article.like_users.count(),
+        # 'liked-count' : article.
+    }
+    return JsonResponse(context)
+    
+    # return redirect('articles:detail', article_pk)
 
-# @login_required
-# def scrap(request, article_pk):
-#     article = Article.objects.get(pk=article_pk)
 
-#     if article.scrap.filter(pk=request.user.pk).exists():
-#         article.scrap.remove(request.user)
-#     else:
-#         article.scrap.add(request.user)
-#     return redirect('articles:detail', article_pk)
+
+
 
 @login_required
 def scrap(request, product_pk):
@@ -275,6 +267,21 @@ def scrap(request, product_pk):
     else:
         product.scrap.add(request.user)
     return redirect('articles:product_detail', product_pk)
+
+
+
+
+@login_required
+def basket(request, product_pk):
+    product = Product.objects.get(pk=product_pk)
+
+    if product.basket.filter(pk=request.user.pk).exists():
+        product.basket.remove(request.user)
+    else:
+        product.basket.add(request.user)
+    return redirect('articles:product_detail', product_pk)
+
+
 
 
 
@@ -337,15 +344,7 @@ def category(request,subject):
     return render(request, 'articles/category.html', context)
 
 
-@login_required
-def basket(request, product_pk):
-    product = Product.objects.get(pk=product_pk)
 
-    if product.basket.filter(pk=request.user.pk).exists():
-        product.basket.remove(request.user)
-    else:
-        product.basket.add(request.user)
-    return redirect('articles:product_detail', product_pk)
 
 
 
