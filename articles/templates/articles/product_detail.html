@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
 
 {% block style %}
-
+.product-review{
+    margin-left:7px;
+}
+.product-review img{
+    width:100px;
+    height:100px;
+}
 {% endblock style %}
 
 {% block content %}
@@ -126,7 +132,17 @@
             <p class='m-2 mb-4' style='font-size: 28px; font-weight: bold; color: #495c40;'>제품 상세정보</p>
             <p class='m-2'>{{ product.content }}</p>
         </div>
-
+         {% comment %} 제품 리뷰 {% endcomment %}
+        <p class='m-2 mb-4' style='font-size: 28px; font-weight: bold; color: #495c40;'>제품 리뷰</p>
+        <div class="product-review">
+            {% for review in product_reviews %}
+                <b><p>{{review.user.nickname}}</p></b>
+                {% comment %} <p><img src=  "{% review.image.url %}"></p> {% endcomment %}
+                <p><img src={{review.image.url}}></p>
+                <p class="mt-3">{{review.content}}</p>
+                <hr>
+                {% endfor %}
+        </div>
     </div>
 </div>
 
