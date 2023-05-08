@@ -14,5 +14,6 @@
 ##### 수정 가능하다면
 - [ ] 다중이미지
 - [ ] 장바구니 
+- [ ] 프로필 이미지 등록
 ##### Reference
 [color](https://colorhunt.co/palette/fff8d6f7e1aea4d0a4617a55)
