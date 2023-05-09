@@ -2,7 +2,7 @@
 **멀티캠퍼스 풀스택 개발자 취업캠프 과정 첫번째 프로젝트**  
 프로젝트 개발 기간: 4월 27일 ~ 5월 8일   
 팀원: 전지현, 김용진, 김지현   
-[프로젝트 시연](https://port-0-todays-taste-4c7jj2blhe0wpv6.sel4.cloudtype.app/articles/product/)
+[프로젝트 시연](https://port-0-todays-taste-4c7jj2blhe0wpv6.sel4.cloudtype.app/articles/product/) / [발표자료 ppt](https://www.miricanvas.com/v/120nct4)
 ![preview](./시연.gif)
 
 
